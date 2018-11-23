@@ -2,13 +2,13 @@
 -- Company: 
 -- Engineer: 
 -- 
--- Create Date:    23:42:34 11/22/2018 
+-- Create Date:    22:40:02 11/23/2018 
 -- Design Name: 
--- Module Name:    TReg - Behavioral 
+-- Module Name:    CPU - Behavioral 
 -- Project Name: 
 -- Target Devices: 
 -- Tool versions: 
--- Description: TReg
+-- Description: 
 --
 -- Dependencies: 
 --
@@ -29,27 +29,13 @@ use IEEE.STD_LOGIC_1164.ALL;
 --library UNISIM;
 --use UNISIM.VComponents.all;
 
-entity TReg is
-    Port ( Twrite : in  STD_LOGIC;
-           clk : in  STD_LOGIC;
-           rst : in  STD_LOGIC;
-           Tin : in  STD_LOGIC;
-           Tout : out  STD_LOGIC);
-end TReg;
+entity CPU is
+end CPU;
 
-architecture Behavioral of TReg is
-	
+architecture Behavioral of CPU is
+
 begin
 
-	process(clk, rst)
-	begin
-		if (rst = '0') then
-			Tout <= '0';
-		elsif (falling_edge(clk)) then
-			if (Twrite = '1') then 
-				Tout <= Tin;
-			end if;
-		end if;	
-	end process;
 
 end Behavioral;
+

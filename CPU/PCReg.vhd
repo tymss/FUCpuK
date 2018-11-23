@@ -2,13 +2,13 @@
 -- Company: 
 -- Engineer: 
 -- 
--- Create Date:    23:42:34 11/22/2018 
+-- Create Date:    23:18:15 11/23/2018 
 -- Design Name: 
--- Module Name:    TReg - Behavioral 
+-- Module Name:    PCReg - Behavioral 
 -- Project Name: 
 -- Target Devices: 
 -- Tool versions: 
--- Description: TReg
+-- Description: 
 --
 -- Dependencies: 
 --
@@ -19,6 +19,7 @@
 ----------------------------------------------------------------------------------
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
+use WORK.DEFINES.ALL;
 
 -- Uncomment the following library declaration if using
 -- arithmetic functions with Signed or Unsigned values
@@ -29,27 +30,29 @@ use IEEE.STD_LOGIC_1164.ALL;
 --library UNISIM;
 --use UNISIM.VComponents.all;
 
-entity TReg is
-    Port ( Twrite : in  STD_LOGIC;
+entity PCReg is
+    Port ( PCin : in  STD_LOGIC_VECTOR (15 downto 0);
            clk : in  STD_LOGIC;
            rst : in  STD_LOGIC;
-           Tin : in  STD_LOGIC;
-           Tout : out  STD_LOGIC);
-end TReg;
+           stall_harzard : in  STD_LOGIC;
+           stall_structure : in  STD_LOGIC;
+           PCout : out  STD_LOGIC_VECTOR (15 downto 0));
+end PCReg;
 
-architecture Behavioral of TReg is
-	
+architecture Behavioral of PCReg is
+
 begin
-
+	
 	process(clk, rst)
 	begin
 		if (rst = '0') then
-			Tout <= '0';
-		elsif (falling_edge(clk)) then
-			if (Twrite = '1') then 
-				Tout <= Tin;
+			PCout <= ZeroData;
+		elsif (rising_edge(clk)) then
+			if ((stall_harzard = '0') and (stall_structure = '0')) then
+				PCout <= PCin;
 			end if;
-		end if;	
+		end if;
 	end process;
 
 end Behavioral;
+

@@ -19,6 +19,7 @@
 ----------------------------------------------------------------------------------
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
+use WORK.DEFINES.ALL;
 
 -- Uncomment the following library declaration if using
 -- arithmetic functions with Signed or Unsigned values
@@ -30,18 +31,53 @@ use IEEE.STD_LOGIC_1164.ALL;
 --use UNISIM.VComponents.all;
 
 entity ALU is
-	Port ( ALUop : in  STD_LOGIC_VECTOR (3 downto 0);
-          rst : in  STD_LOGIC;
-          oper_1 : in  STD_LOGIC_VECTOR (15 downto 0);
-			 oper_2 : in  STD_LOGIC_VECTOR (15 downto 0);
-          ALUflag : out  STD_LOGIC;
-		    ALUout : out STD_LOGIC_VECTOR (15 downto 0));
+	Port ( 
+	ALUop : in  STD_LOGIC_VECTOR (2 downto 0);
+	rst : in  STD_LOGIC;
+	oper_1 : in  STD_LOGIC_VECTOR (15 downto 0);
+	oper_2 : in  STD_LOGIC_VECTOR (15 downto 0);
+	ALUflag : out  STD_LOGIC;
+	ALUout : out STD_LOGIC_VECTOR (15 downto 0));
 end ALU;
 
 architecture Behavioral of ALU is
+
+signal temp : STD_LOGIC_VECTOR (15 downto 0);	
 	
 begin
-
+	
+	process(rst, ALUop, oper_1, oper_2)
+	begin
+		if (rst = '1') then
+			ALUout <= ZeroData;
+			ALUflag <= '0';
+		else	
+			case ALUop is
+				when "000" =>
+					ALUout <= oper_1 + oper_2;
+				when "001" =>
+					ALUout <= oper_1 and oper_2;
+				when "010" =>
+					ALUout <= oper_1 - oper_2;
+					temp <= oper_1 - oper_2;
+					if (temp = ZeroData) then
+						ALUflag <= '0';
+					else
+						ALUflag <= '1';
+					end if;
+				when "011" =>
+					ALUout <= oper_1 or oper_2;
+				when "100" =>
+					ALUout <= oper_1 sll oper_2;
+				when "101" =>
+					ALUout <= oper_1 sra oper_2;
+				when "110" =>
+					temp <= oper_1 - oper_2;
+					ALUflag <= temp(15);
+				when others =>	
+			end case;
+		end if;
+	end process;
 
 end Behavioral;
 

@@ -1,12 +1,12 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <report-views version="2.0" >
  <header>
-  <DateModified>2018-11-23T23:34:57</DateModified>
+  <DateModified>2018-11-23T23:43:19</DateModified>
   <ModuleName>CPU</ModuleName>
-  <SummaryTimeStamp>2018-11-23T23:32:36</SummaryTimeStamp>
-  <SavedFilePath>G:/workspace/FUCpuK/CPU/iseconfig/TReg.xreport</SavedFilePath>
-  <ImplementationReportsDirectory>G:/workspace/FUCpuK/CPU\</ImplementationReportsDirectory>
-  <DateInitialized>2018-11-23T23:34:49</DateInitialized>
+  <SummaryTimeStamp>2018-11-23T23:43:00</SummaryTimeStamp>
+  <SavedFilePath>G:/workspace/FUCpuK/CPU/iseconfig/CPU.xreport</SavedFilePath>
+  <ImplementationReportsDirectory>G:/workspace/FUCpuK/CPU</ImplementationReportsDirectory>
+  <DateInitialized>2018-11-23T23:43:13</DateInitialized>
   <EnableMessageFiltering>false</EnableMessageFiltering>
  </header>
  <body>
