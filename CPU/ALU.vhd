@@ -19,6 +19,9 @@
 ----------------------------------------------------------------------------------
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
+use IEEE.STD_LOGIC_ARITH.ALL;
+use IEEE.STD_LOGIC_UNSIGNED.ALL;
+use IEEE.numeric_std.ALL;
 use WORK.DEFINES.ALL;
 
 -- Uncomment the following library declaration if using
@@ -68,9 +71,9 @@ begin
 				when "011" =>
 					ALUout <= oper_1 or oper_2;
 				when "100" =>
-					ALUout <= oper_1 sll oper_2;
+					ALUout <= to_stdlogicvector(to_bitvector(oper_1) sll conv_integer(oper_2));
 				when "101" =>
-					ALUout <= oper_1 sra oper_2;
+					ALUout <= to_stdlogicvector(to_bitvector(oper_1) sra conv_integer(oper_2));
 				when "110" =>
 					temp <= oper_1 - oper_2;
 					ALUflag <= temp(15);

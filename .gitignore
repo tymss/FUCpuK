@@ -1,5 +1,5 @@
-*/*_summary.html
-*/*.gise
-*/*.ncd
-*/*.xise
+CPU/*
+!CPU/*.vhd
+!CPU/_xmsgs/
+!CPU/iseconfig/
 !CPU/CPU.xise
