@@ -29,6 +29,7 @@ package Defines is
 -- procedure <procedure_name> (<type_declaration> <constant_name>	: in <type_declaration>);
 --
 	constant ZeroData : STD_LOGIC_VECTOR (15 downto 0) := "0000000000000000";
+	constant NopIns : STD_LOGIC_VECTOR (15 downto 0) := "0000100000000000";
 
 end Defines;
 
