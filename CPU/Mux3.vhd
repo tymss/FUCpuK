@@ -30,16 +30,15 @@ use WORK.DEFINES.ALL;
 --library UNISIM;
 --use UNISIM.VComponents.all;
 
-entity Mux4 is
+entity Mux3 is
     Port ( sel : in  STD_LOGIC_VECTOR (1 downto 0);
            input0 : in  STD_LOGIC_VECTOR (15 downto 0);
            input1 : in  STD_LOGIC_VECTOR (15 downto 0);
            input2 : in  STD_LOGIC_VECTOR (15 downto 0);
-           input3 : in  STD_LOGIC_VECTOR (15 downto 0);
            output : out  STD_LOGIC_VECTOR (15 downto 0));
-end Mux4;
+end Mux3;
 
-architecture Behavioral of Mux4 is
+architecture Behavioral of Mux3 is
 
 begin
 	
@@ -48,7 +47,6 @@ begin
 			input0 when "00",
 			input1 when "01",
 			input2 when "10",
-			input3 when "11",
 			ZeroData when others;
 
 end Behavioral;
