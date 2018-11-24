@@ -30,6 +30,7 @@ package Defines is
 --
 	constant ZeroData : STD_LOGIC_VECTOR (15 downto 0) := "0000000000000000";
 	constant NopIns : STD_LOGIC_VECTOR (15 downto 0) := "0000100000000000";
+	constant ZeroAddr : STD_LOGIC_VECTOR (3 downto 0) := "1111";
 
 end Defines;
 
