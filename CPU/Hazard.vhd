@@ -2,9 +2,9 @@
 -- Company: 
 -- Engineer: 
 -- 
--- Create Date:    17:38:40 11/24/2018 
+-- Create Date:    17:58:09 11/24/2018 
 -- Design Name: 
--- Module Name:    Forward - Behavioral 
+-- Module Name:    Hazard - Behavioral 
 -- Project Name: 
 -- Target Devices: 
 -- Tool versions: 
@@ -29,31 +29,32 @@ use IEEE.STD_LOGIC_1164.ALL;
 --library UNISIM;
 --use UNISIM.VComponents.all;
 
-entity Forward is
+entity Hazard is
     Port ( rst : in  STD_LOGIC;
-           src_addr : in  STD_LOGIC_VECTOR (3 downto 0);
-           regW1 : in  STD_LOGIC;
-           regW2 : in  STD_LOGIC;
-           reg_dst1 : in  STD_LOGIC_VECTOR (3 downto 0);
-           reg_dst2 : in  STD_LOGIC_VECTOR (3 downto 0);
-           sel : out  STD_LOGIC_VECTOR (1 downto 0));
-end Forward;
+           reg1addr : in  STD_LOGIC_VECTOR (3 downto 0);
+           reg2addr : in  STD_LOGIC_VECTOR (3 downto 0);
+           exe_memR : in  STD_LOGIC;
+           regDst : in  STD_LOGIC_VECTOR (3 downto 0);
+           flush : out  STD_LOGIC;
+           stall_pc : out  STD_LOGIC;
+           stall_if_id : out  STD_LOGIC);
+end Hazard;
 
-architecture Behavioral of Forward is
-	
+architecture Behavioral of Hazard is
+
 begin
-	
-	process(rst, src_addr, regW1, regW2, reg_dst1, reg_dst2)
+
+	process(rst, reg1addr, reg2addr, exe_memR, regDst)
 	begin
 		if (rst = '0') then
-			sel <= "00";
+			flush <= '0';
+			stall_pc <= '0';
+			stall_if_id <= '0';
 		else
-			if ((regW1 = '1') and (reg_dst1 = src_addr)) then
-				sel <= "01";
-			elsif ((regW2 = '1') and (reg_dst2 = src_addr) and ((regW1 = '0') or (reg_dst1 /= src_addr))) then
-				sel <= "10";
-			else
-				sel <= "00";
+			if ((exe_memR = '1') and ((regDst = reg1addr) or (regDst = reg2addr))) then
+				flush <= '1';
+				stall_pc <= '1';
+				stall_if_id <= '1';
 			end if;
 		end if;
 	end process;
