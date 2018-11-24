@@ -45,6 +45,7 @@ entity ID_EXE is
            id_memR : in  STD_LOGIC;
            id_memW : in  STD_LOGIC;
            id_regW : in  STD_LOGIC;
+			  id_TW : in STD_LOGIC;
            id_aluOp : in  STD_LOGIC_VECTOR (2 downto 0);
            exe_reg1 : out  STD_LOGIC_VECTOR (15 downto 0);
            exe_reg2 : out  STD_LOGIC_VECTOR (15 downto 0);
@@ -57,6 +58,7 @@ entity ID_EXE is
            exe_memR : out  STD_LOGIC;
            exe_memW : out  STD_LOGIC;
            exe_regW : out  STD_LOGIC;
+			  exe_TW : out STD_LOGIC;
 			  exe_lastLW : out STD_LOGIC);
 end ID_EXE;
 
@@ -79,6 +81,7 @@ begin
 			exe_memW <= '0';
 			exe_regW <= '0';
 			exe_lastLW <= '0';
+			exe_TW <= '0';
 		elsif (rising_edge(clk)) then
 			if ((flush_structure = '1') or (flush_hazard = '1')) then
 				exe_reg1 <= ZeroData;
@@ -92,6 +95,7 @@ begin
 				exe_memR <= '0';
 				exe_memW <= '0';
 				exe_regW <= '0';
+				exe_TW <= '0';
 				if (flush_hazard = '1') then
 					exe_lastLW <= '1';
 				end if;
@@ -108,6 +112,7 @@ begin
 				exe_memW <= id_memW;
 				exe_regW <= id_regW;
 				exe_lastLW <= '0';
+				exe_TW <= id_TW;
 			end if;
 		end if;
 	end process;

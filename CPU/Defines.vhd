@@ -31,6 +31,10 @@ package Defines is
 	constant ZeroData : STD_LOGIC_VECTOR (15 downto 0) := "0000000000000000";
 	constant NopIns : STD_LOGIC_VECTOR (15 downto 0) := "0000100000000000";
 	constant ZeroAddr : STD_LOGIC_VECTOR (3 downto 0) := "1111";
+	constant RegRA : STD_LOGIC_VECTOR (3 downto 0) := "1000";
+	constant RegSP : STD_LOGIC_VECTOR (3 downto 0) := "1001";
+	constant RegIH : STD_LOGIC_VECTOR (3 downto 0) := "1010";
+	constant RegPC : STD_LOGIC_VECTOR (3 downto 0) := "1011";
 
 end Defines;
 
