@@ -56,7 +56,8 @@ entity ID_EXE is
            exe_aluOp : out  STD_LOGIC_VECTOR (2 downto 0);
            exe_memR : out  STD_LOGIC;
            exe_memW : out  STD_LOGIC;
-           exe_regW : out  STD_LOGIC);
+           exe_regW : out  STD_LOGIC;
+			  exe_lastLW : out STD_LOGIC);
 end ID_EXE;
 
 architecture Behavioral of ID_EXE is
@@ -77,6 +78,7 @@ begin
 			exe_memR <= '0';
 			exe_memW <= '0';
 			exe_regW <= '0';
+			exe_lastLW <= '0';
 		elsif (rising_edge(clk)) then
 			if ((flush_structure = '1') or (flush_hazard = '1')) then
 				exe_reg1 <= ZeroData;
@@ -90,6 +92,9 @@ begin
 				exe_memR <= '0';
 				exe_memW <= '0';
 				exe_regW <= '0';
+				if (flush_hazard = '1') then
+					exe_lastLW <= '1';
+				end if;
 			else
 				exe_reg1 <= id_reg1;
 				exe_reg2 <= id_reg2;
@@ -102,6 +107,7 @@ begin
 				exe_memR <= id_memR;
 				exe_memW <= id_memW;
 				exe_regW <= id_regW;
+				exe_lastLW <= '0';
 			end if;
 		end if;
 	end process;
