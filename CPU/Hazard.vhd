@@ -19,6 +19,7 @@
 ----------------------------------------------------------------------------------
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
+use WORK.DEFINES.ALL; 
 
 -- Uncomment the following library declaration if using
 -- arithmetic functions with Signed or Unsigned values
@@ -51,7 +52,7 @@ begin
 			stall_pc <= '0';
 			stall_if_id <= '0';
 		else
-			if ((exe_memR = '1') and ((regDst = reg1addr) or (regDst = reg2addr))) then
+			if ((exe_memR = '1') and (((regDst = reg1addr) and (reg1addr /= ZeroAddr)) or ((regDst = reg2addr) and (reg2addr /= ZeroAddr)))) then
 				flush <= '1';
 				stall_pc <= '1';
 				stall_if_id <= '1';

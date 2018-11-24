@@ -19,6 +19,7 @@
 ----------------------------------------------------------------------------------
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
+use WORK.DEFINES.ALL;
 
 -- Uncomment the following library declaration if using
 -- arithmetic functions with Signed or Unsigned values
@@ -48,9 +49,9 @@ begin
 		if (rst = '0') then
 			sel <= "00";
 		else
-			if ((regW1 = '1') and (reg_dst1 = src_addr)) then
+			if ((regW1 = '1') and (reg_dst1 = src_addr) and (reg_dst1 /= ZeroAddr)) then
 				sel <= "01";
-			elsif ((regW2 = '1') and (reg_dst2 = src_addr) and ((regW1 = '0') or (reg_dst1 /= src_addr))) then
+			elsif ((regW2 = '1') and (reg_dst2 = src_addr) and (reg_dst2 /= ZeroAddr) and ((regW1 = '0') or (reg_dst1 /= src_addr) or (reg_dst1 = ZeroAddr))) then
 				sel <= "10";
 			else
 				sel <= "00";
