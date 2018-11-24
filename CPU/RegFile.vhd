@@ -38,7 +38,7 @@ entity RegFile is
            RegWrite : in  STD_LOGIC;
            WriteAddr : in  STD_LOGIC_VECTOR (3 downto 0);
            WriteData : in  STD_LOGIC_VECTOR (15 downto 0);
-           PCin : inout  STD_LOGIC_VECTOR (15 downto 0);
+           PCin : in  STD_LOGIC_VECTOR (15 downto 0);
            Reg1Data : out  STD_LOGIC_VECTOR (15 downto 0);
            Reg2Data : out  STD_LOGIC_VECTOR (15 downto 0));
 end RegFile;
