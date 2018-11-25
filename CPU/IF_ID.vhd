@@ -2,9 +2,9 @@
 -- Company: 
 -- Engineer: 
 -- 
--- Create Date:    23:18:15 11/23/2018 
+-- Create Date:    13:04:53 11/24/2018 
 -- Design Name: 
--- Module Name:    PCReg - Behavioral 
+-- Module Name:    IF_ID - Behavioral 
 -- Project Name: 
 -- Target Devices: 
 -- Tool versions: 
@@ -30,28 +30,35 @@ use WORK.DEFINES.ALL;
 --library UNISIM;
 --use UNISIM.VComponents.all;
 
-entity PCReg is
-    Port ( PCin : in  STD_LOGIC_VECTOR (15 downto 0);
-           clk : in  STD_LOGIC;
+entity IF_ID is
+    Port ( clk : in  STD_LOGIC;
            rst : in  STD_LOGIC;
-           stall_hazard : in  STD_LOGIC;
+           if_pc : in  STD_LOGIC_VECTOR (15 downto 0);
+           if_ins : in  STD_LOGIC_VECTOR (15 downto 0);
            stall_structure : in  STD_LOGIC;
-           PCout : out  STD_LOGIC_VECTOR (15 downto 0));
-end PCReg;
+           stall_hazard : in  STD_LOGIC;
+           b_flush : in  STD_LOGIC;
+           id_pc : out  STD_LOGIC_VECTOR (15 downto 0);
+           id_ins : out  STD_LOGIC_VECTOR (15 downto 0));
+end IF_ID;
 
-architecture Behavioral of PCReg is
+architecture Behavioral of IF_ID is
 
 begin
-	
+
 	process(clk, rst)
 	begin
 		if (rst = '0') then
-			PCout <= ZeroData;
+			id_pc <= ZeroData;
+			id_ins <= NopIns;
 		elsif (rising_edge(clk)) then
-			if ((stall_hazard = '0') and (stall_structure = '0')) then
-				PCout <= PCin;
-			end if;
-		end if;
+			if (b_flush = '1') then
+				id_ins <= NopIns;
+			elsif ((stall_structure = '0') and (stall_hazard = '0')) then
+				id_pc <= if_pc;
+				id_ins <= if_ins;
+			end if;	
+		end if;	
 	end process;
 
 end Behavioral;

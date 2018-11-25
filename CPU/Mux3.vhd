@@ -2,9 +2,9 @@
 -- Company: 
 -- Engineer: 
 -- 
--- Create Date:    23:18:15 11/23/2018 
+-- Create Date:    15:27:10 11/24/2018 
 -- Design Name: 
--- Module Name:    PCReg - Behavioral 
+-- Module Name:    Mux4 - Behavioral 
 -- Project Name: 
 -- Target Devices: 
 -- Tool versions: 
@@ -30,29 +30,24 @@ use WORK.DEFINES.ALL;
 --library UNISIM;
 --use UNISIM.VComponents.all;
 
-entity PCReg is
-    Port ( PCin : in  STD_LOGIC_VECTOR (15 downto 0);
-           clk : in  STD_LOGIC;
-           rst : in  STD_LOGIC;
-           stall_hazard : in  STD_LOGIC;
-           stall_structure : in  STD_LOGIC;
-           PCout : out  STD_LOGIC_VECTOR (15 downto 0));
-end PCReg;
+entity Mux3 is
+    Port ( sel : in  STD_LOGIC_VECTOR (1 downto 0);
+           input0 : in  STD_LOGIC_VECTOR (15 downto 0);
+           input1 : in  STD_LOGIC_VECTOR (15 downto 0);
+           input2 : in  STD_LOGIC_VECTOR (15 downto 0);
+           output : out  STD_LOGIC_VECTOR (15 downto 0));
+end Mux3;
 
-architecture Behavioral of PCReg is
+architecture Behavioral of Mux3 is
 
 begin
 	
-	process(clk, rst)
-	begin
-		if (rst = '0') then
-			PCout <= ZeroData;
-		elsif (rising_edge(clk)) then
-			if ((stall_hazard = '0') and (stall_structure = '0')) then
-				PCout <= PCin;
-			end if;
-		end if;
-	end process;
+	with sel select
+		output <=
+			input0 when "00",
+			input1 when "01",
+			input2 when "10",
+			ZeroData when others;
 
 end Behavioral;
 

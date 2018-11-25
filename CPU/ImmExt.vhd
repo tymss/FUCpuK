@@ -35,7 +35,7 @@ entity ImmExt is
     Port ( rst : in  STD_LOGIC;
            Extop : in  STD_LOGIC_VECTOR (2 downto 0);
            Imm8 : in  STD_LOGIC_VECTOR (7 downto 0);
-           Imm4 : in  STD_LOGIC_VECTOR (4 downto 0);
+           Imm4 : in  STD_LOGIC_VECTOR (3 downto 0);
            Imm11 : in  STD_LOGIC_VECTOR (10 downto 0);
            Imm5 : in  STD_LOGIC_VECTOR (4 downto 0);
            Imm3 : in  STD_LOGIC_VECTOR (2 downto 0);
