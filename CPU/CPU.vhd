@@ -139,8 +139,7 @@ architecture Behavioral of CPU is
 		exe_memR : out  STD_LOGIC;
 		exe_memW : out  STD_LOGIC;
 		exe_regW : out  STD_LOGIC;
-		exe_TW : out STD_LOGIC;
-		exe_lastLW : out STD_LOGIC);
+		exe_TW : out STD_LOGIC);
 	end component;
 	
 	component ALU
@@ -198,11 +197,13 @@ architecture Behavioral of CPU is
 		Port ( 
 		clk : in  STD_LOGIC;
 		rst : in  STD_LOGIC;
-		mem_regW : in  STD_LOGIC;
+		mem_regW : in 	STD_LOGIC;
+		mem_memR : in 	STD_LOGIC; 
 		mem_aluResult : in  STD_LOGIC_VECTOR (15 downto 0);
 		mem_regDst : in  STD_LOGIC_VECTOR (3 downto 0);
 		mem_readData : in  STD_LOGIC_VECTOR (15 downto 0);
 		wb_regW : out  STD_LOGIC;
+		wb_memR : out 	STD_LOGIC;
 		wb_aluResult : out  STD_LOGIC_VECTOR (15 downto 0);
 		wb_regDst : out  STD_LOGIC_VECTOR (3 downto 0);
 		wb_readData : out  STD_LOGIC_VECTOR (15 downto 0));
@@ -225,7 +226,7 @@ architecture Behavioral of CPU is
 		output : out  STD_LOGIC_VECTOR (15 downto 0));
 	end component;
 
-	component BrachControl
+	component BranchControl
 		Port ( 
 		rst : in  STD_LOGIC;
 		b_op : in  STD_LOGIC_VECTOR (2 downto 0);
@@ -258,13 +259,22 @@ architecture Behavioral of CPU is
 		stall_if_id : out  STD_LOGIC);
 	end component;
 	
-	signal h_stall : std_logic;  --hazard–≈∫≈
+	signal ifid_h_stall : std_logic;  --hazard–≈∫≈
+	signal pc_h_stall : std_logic;
+	signal idexe_h_flush : std_logic;
 
    signal pc_in : std_logic_vector (15 downto 0);	
 	signal pc_out : std_logic_vector (15 downto 0);	
 	signal if_pc : std_logic_vector (15 downto 0);
 	
 	signal b_jump : std_logic;
+	signal b_cont : std_logic_vector (2 downto 0);
+	signal b_f_sel : std_logic_vector (1 downto 0);
+	signal b_f_out : std_logic_vector (15 downto 0);
+	signal b_rx : std_logic_vector (15 downto 0);
+	signal b_last_lw : std_logic;
+	signal b_target_sel : std_logic_vector (1 downto 0);
+	
 	signal id_pc : std_logic_vector (15 downto 0);
 	signal id_ins : std_logic_vector (15 downto 0);
 	signal id_reg1addr : std_logic_vector (3 downto 0);
@@ -277,7 +287,7 @@ architecture Behavioral of CPU is
 	signal id_memW : std_logic;
 	signal id_regW : std_logic;
 	signal id_TW : std_logic;
-	signal b_cont : std_logic_vector (2 downto 0);
+	
 	signal pc_imm : std_logic_vector (15 downto 0);
 	signal id_reg1 : std_logic_vector (15 downto 0);
 	signal id_reg2 : std_logic_vector (15 downto 0);
@@ -294,23 +304,41 @@ architecture Behavioral of CPU is
 	signal exe_memW : std_logic;
 	signal exe_regW : std_logic;
 	signal exe_TW : std_logic;
-	signal exe_lastLW : std_logic;
+	signal alusel_out : std_logic_vector (15 downto 0);
+	
+	signal alu_sel1 : std_logic_vector (1 downto 0);
+	signal alu_sel2 : std_logic_vector (1 downto 0);
+	signal aluoper1 : std_logic_vector (15 downto 0);
+	signal aluoper2 : std_logic_vector (15 downto 0);
+	signal aluflag : std_logic;
+	signal exe_aluout : std_logic_vector (15 downto 0);
+	signal exe_Tout : std_logic;
+	
+	signal mem_aluout : std_logic_vector (15 downto 0);
+	signal mem_regW : std_logic;
+	signal mem_regdst : std_logic_vector (3 downto 0);
+	signal mem_reg2 : std_logic_vector (15 downto 0);
+	signal mem_memW : std_logic;
+	signal mem_memR : std_logic;
 	
 	signal wb_regW : std_logic;
+	signal wb_memR : std_logic;
 	signal wb_addr : std_logic_vector (3 downto 0);
+	signal wb_aluout : std_logic_vector (15 downto 0);
+	signal wb_readdata : std_logic_vector (15 downto 0);
 	signal wb_data : std_logic_vector (15 downto 0);
 	
 begin
 		
 	ins_addr <= pc_out;	
 	
-	pc_reg : PCReg	port map(PCin=>pc_in, clk=>clk, rst=>rst, stall_hazard=>h_stall, 
+	pc_reg : PCReg	port map(PCin=>pc_in, clk=>clk, rst=>rst, stall_hazard=>pc_h_stall, 
 									stall_structure=>struct_ins_stall, PCout=>pc_out);
 	
 	pc_adder : Adder port map(rst=>rst, oper_1=>pc_out, oper_2=>OneData, output=>if_pc);
 	
 	if_id_reg : IF_ID port map(clk=>clk, rst=>rst, if_pc=>if_pc, if_ins=>ins_in, 
-										stall_structure=>struct_ins_stall, stall_hazard=>h_stall,
+										stall_structure=>struct_ins_stall, stall_hazard=>ifid_h_stall,
 										b_flush=>b_jump, id_pc=>id_pc, id_ins=>id_ins);
 	
 	id_decoder : Decoder port map(rst=>rst, ins=>id_ins, reg1=>id_reg1addr, reg2=>id_reg2addr,
@@ -323,13 +351,66 @@ begin
 											RegWrite=>wb_regW, WriteAddr=>wb_addr, WriteData=>wb_data, PCin=>id_pc,
 											Reg1Data=>id_reg1, Reg2Data=>id_reg2);
 											
-	id_exe_reg : ID_EXE port map(clk=>clk, rst=>rst, flush_structure=>struct_ins_stall, flush_hazard=>h_stall,
+	id_exe_reg : ID_EXE port map(clk=>clk, rst=>rst, flush_structure=>struct_ins_stall, flush_hazard=>idexe_h_flush,
 										  id_reg1=>id_reg1, id_reg2=>id_reg2, id_reg1addr=>id_reg1addr, id_reg2addr=>id_reg2addr,
 										  id_imm=>id_imm, id_regDst=>id_regDst, id_aluSel=>id_alusel, id_memR=>id_memR, 
 										  id_memW=>id_memW, id_regW=>id_regW, id_TW=>id_TW, id_aluOp=>id_aluop, exe_reg1=>exe_reg1,
 										  exe_reg2=>exe_reg2, exe_reg1addr=>exe_reg1addr, exe_reg2addr=>exe_reg2addr, exe_regDst=>exe_regdst,
 										  exe_imm=>exe_imm, exe_aluSel=>exe_alusel, exe_aluOp=>exe_aluop, exe_memR=>exe_memR, exe_memW=>exe_memW,
-										  exe_regW=>exe_regW, exe_TW=>exe_TW, exe_lastLW=>exe_lastLW);
-										
+										  exe_regW=>exe_regW, exe_TW=>exe_TW);
+	
+	aluselector : Mux2 port map(sel=>exe_alusel, input0=>exe_reg2, input1=>exe_imm, output=>alusel_out);
+	
+	forward1 : Forward port map(rst=>rst, src_addr=>exe_reg1addr, regW1=>mem_regW, regW2=>wb_regW, reg_dst1=>mem_regdst,
+										 reg_dst2=>wb_addr, sel=>alu_sel1);
+	
+	forward2 : Forward port map(rst=>rst, src_addr=>exe_reg2addr, regW1=>mem_regW, regW2=>wb_regW, reg_dst1=>mem_regdst,
+										 reg_dst2=>wb_addr, sel=>alu_sel2);
+	
+	aluoper1_sel : Mux3 port map(sel=>alu_sel1, input0=>exe_reg1, input1=>mem_aluout, input2=>wb_data, output=>aluoper1);
+	
+	aluoper2_sel : Mux3 port map(sel=>alu_sel2, input0=>alusel_out, input1=>mem_aluout, input2=>wb_data, output=>aluoper2);
+	
+	exe_alu : ALU port map(ALUop=>exe_aluop, rst=>rst, oper_1=>aluoper1, oper_2=>aluoper2, ALUflag=>aluflag, ALUout=>exe_aluout);
+
+	t_reg : TReg port map(Twrite=>exe_TW, clk=>clk, rst=>rst, Tin=>aluflag, Tout=>exe_Tout);
+	
+	exe_mem_reg : EXE_MEM port map(rst=>rst, clk=>clk, exe_aluResult=>exe_aluout, exe_reg2=>exe_reg2, exe_regDst=>exe_regdst,
+											 exe_memW=>exe_memW, exe_memR=>exe_memR, exe_regW=>exe_regW, mem_aluResult=>mem_aluout,
+											 mem_reg2=>mem_reg2, mem_regDst=>mem_regdst, mem_memW=>mem_memW, mem_memR=>mem_memR, mem_regW=>mem_regW);
+											 
+	mem_delay : MEM port map(rst=>rst, memR_in=>mem_memR, memW_in=>mem_memW, mem_addr_in=>mem_aluout, mem_data_in=>mem_reg2,
+									 memR_out=>ram_memR, memW_out=>ram_memW, mem_addr_out=>ram_addr_out, mem_data_out=>ram_data_out, mem_EN=>ram_EN);
+
+	mem_wb_reg : MEM_WB port map(clk=>clk, rst=>rst, mem_regW=>mem_regW, mem_memR=>mem_memR, mem_aluResult=>mem_aluout, mem_regDst=>mem_regdst,
+										  mem_readData=>ram_data_in, wb_regW=>wb_regW, wb_memR=>wb_memR, wb_aluResult=>wb_aluout, wb_regDst=>wb_addr, 
+										  wb_readData=>wb_readdata);
+
+   wb_selector : Mux2 port map(sel=>wb_memR, input0=>wb_aluout, input1=>wb_readdata, output=>wb_data);
+
+	hazard_controller : Hazard port map(rst=>rst, reg1addr=>id_reg1addr, reg2addr=>id_reg2addr, exe_memR=>exe_memR, 
+													regDst=>exe_regdst, flush=>idexe_h_flush, stall_pc=>pc_h_stall, stall_if_id=>ifid_h_stall);
+	
+	branch_forward : Forward port map(rst=>rst, src_addr=>id_reg1addr, regW1=>exe_regW, regW2=>mem_regW, reg_dst1=>exe_regdst,
+	                                  reg_dst2=>mem_regdst, sel=>b_f_sel);
+	
+	b_rx_mux3 : Mux3 port map(sel=>b_f_sel, input0=>id_reg1, input1=>exe_aluout, input2=>mem_aluout, output=>b_f_out);
+	
+	b_rx_mux2 : Mux2 port map(sel=>b_last_lw, input0=>b_f_out, input1=>ram_data_in, output=>b_rx);
+	
+	branch_controller : BranchControl port map(rst=>rst, b_op=>b_cont, Tdata=>exe_Tout, RegData=>b_rx, sel=>b_target_sel,
+															 jump=>b_jump);
+															 
+	b_target_mux3 : Mux3 port map(sel=>b_target_sel, input0=>id_pc, input1=>pc_imm, input2=>b_rx, output=>pc_in);
+	
+	process(mem_memR, mem_regdst, id_reg1addr)
+	begin
+		if ((mem_memR = '1') and (mem_regdst = id_reg1addr) and (id_reg1addr /= ZeroAddr)) then
+			b_last_lw <= '1';
+		else
+			b_last_lw <= '0';
+		end if;
+	end process;
+		
 end Behavioral;
 
