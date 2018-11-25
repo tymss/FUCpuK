@@ -41,7 +41,6 @@ entity CPU is
 	ram_addr_out : out STD_LOGIC_VECTOR (15 downto 0);  --访存地址
 	ram_memR : out STD_LOGIC;
 	ram_memW : out STD_LOGIC;
-	ram_EN : out STD_LOGIC;
 	ram_data_out : out STD_LOGIC_VECTOR (15 downto 0)  --需要写入内存的数据
 	);
 end CPU;
@@ -189,8 +188,7 @@ architecture Behavioral of CPU is
 		memR_out : out STD_LOGIC;
 		memW_out : out STD_LOGIC;
 		mem_addr_out : out STD_LOGIC_VECTOR (15 downto 0);
-		mem_data_out : out STD_LOGIC_VECTOR (15 downto 0);
-		mem_EN : out STD_LOGIC);
+		mem_data_out : out STD_LOGIC_VECTOR (15 downto 0));
 	end component;
 
 	component MEM_WB
@@ -380,7 +378,7 @@ begin
 											 mem_reg2=>mem_reg2, mem_regDst=>mem_regdst, mem_memW=>mem_memW, mem_memR=>mem_memR, mem_regW=>mem_regW);
 											 
 	mem_delay : MEM port map(rst=>rst, memR_in=>mem_memR, memW_in=>mem_memW, mem_addr_in=>mem_aluout, mem_data_in=>mem_reg2,
-									 memR_out=>ram_memR, memW_out=>ram_memW, mem_addr_out=>ram_addr_out, mem_data_out=>ram_data_out, mem_EN=>ram_EN);
+									 memR_out=>ram_memR, memW_out=>ram_memW, mem_addr_out=>ram_addr_out, mem_data_out=>ram_data_out);
 
 	mem_wb_reg : MEM_WB port map(clk=>clk, rst=>rst, mem_regW=>mem_regW, mem_memR=>mem_memR, mem_aluResult=>mem_aluout, mem_regDst=>mem_regdst,
 										  mem_readData=>ram_data_in, wb_regW=>wb_regW, wb_memR=>wb_memR, wb_aluResult=>wb_aluout, wb_regDst=>wb_addr, 
