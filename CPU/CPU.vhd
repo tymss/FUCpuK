@@ -19,6 +19,7 @@
 ----------------------------------------------------------------------------------
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
+use WORK.DEFINES.ALL;
 
 -- Uncomment the following library declaration if using
 -- arithmetic functions with Signed or Unsigned values
@@ -230,7 +231,8 @@ architecture Behavioral of CPU is
 		b_op : in  STD_LOGIC_VECTOR (2 downto 0);
 		Tdata : in  STD_LOGIC;
 		RegData : in  STD_LOGIC_VECTOR (15 downto 0);
-		sel : out  STD_LOGIC_VECTOR (1 downto 0));
+		sel : out  STD_LOGIC_VECTOR (1 downto 0);
+		jump : out STD_LOGIC);
 	end component;
 
 	component Forward
@@ -255,10 +257,79 @@ architecture Behavioral of CPU is
 		stall_pc : out  STD_LOGIC;
 		stall_if_id : out  STD_LOGIC);
 	end component;
-			
+	
+	signal h_stall : std_logic;  --hazard–≈∫≈
+
+   signal pc_in : std_logic_vector (15 downto 0);	
+	signal pc_out : std_logic_vector (15 downto 0);	
+	signal if_pc : std_logic_vector (15 downto 0);
+	
+	signal b_jump : std_logic;
+	signal id_pc : std_logic_vector (15 downto 0);
+	signal id_ins : std_logic_vector (15 downto 0);
+	signal id_reg1addr : std_logic_vector (3 downto 0);
+	signal id_reg2addr : std_logic_vector (3 downto 0);
+	signal id_regDst : std_logic_vector (3 downto 0);
+	signal id_aluop : std_logic_vector (2 downto 0);
+	signal id_imm : std_logic_vector (15 downto 0);
+	signal id_alusel : std_logic;
+	signal id_memR : std_logic;
+	signal id_memW : std_logic;
+	signal id_regW : std_logic;
+	signal id_TW : std_logic;
+	signal b_cont : std_logic_vector (2 downto 0);
+	signal pc_imm : std_logic_vector (15 downto 0);
+	signal id_reg1 : std_logic_vector (15 downto 0);
+	signal id_reg2 : std_logic_vector (15 downto 0);
+	
+	signal exe_reg1 : std_logic_vector (15 downto 0);
+	signal exe_reg2 : std_logic_vector (15 downto 0);
+	signal exe_reg1addr : std_logic_vector (3 downto 0);
+	signal exe_reg2addr : std_logic_vector (3 downto 0);
+	signal exe_regdst : std_logic_vector (3 downto 0);
+	signal exe_imm : std_logic_vector (15 downto 0);
+	signal exe_alusel : std_logic;
+	signal exe_aluop : std_logic_vector (2 downto 0);
+	signal exe_memR : std_logic;
+	signal exe_memW : std_logic;
+	signal exe_regW : std_logic;
+	signal exe_TW : std_logic;
+	signal exe_lastLW : std_logic;
+	
+	signal wb_regW : std_logic;
+	signal wb_addr : std_logic_vector (3 downto 0);
+	signal wb_data : std_logic_vector (15 downto 0);
+	
 begin
 		
-	_pcreg : PCReg	port map();
-
+	ins_addr <= pc_out;	
+	
+	pc_reg : PCReg	port map(PCin=>pc_in, clk=>clk, rst=>rst, stall_hazard=>h_stall, 
+									stall_structure=>struct_ins_stall, PCout=>pc_out);
+	
+	pc_adder : Adder port map(rst=>rst, oper_1=>pc_out, oper_2=>OneData, output=>if_pc);
+	
+	if_id_reg : IF_ID port map(clk=>clk, rst=>rst, if_pc=>if_pc, if_ins=>ins_in, 
+										stall_structure=>struct_ins_stall, stall_hazard=>h_stall,
+										b_flush=>b_jump, id_pc=>id_pc, id_ins=>id_ins);
+	
+	id_decoder : Decoder port map(rst=>rst, ins=>id_ins, reg1=>id_reg1addr, reg2=>id_reg2addr,
+											aluOp=>id_aluop, imm=>id_imm, regDst=>id_regDst, aluSel=>id_alusel,
+											memR=>id_memR, memW=>id_memW, regW=>id_regW, TW=>id_TW, b_cont=>b_cont);
+	
+	pc_imm_adder : Adder port map(rst=>rst, oper_1=>id_pc, oper_2=>id_imm, output=>pc_imm);
+	
+	id_regfile : RegFile port map(clk=>clk, rst=>rst, Reg1Addr=>id_reg1addr, Reg2Addr=>id_reg2addr,
+											RegWrite=>wb_regW, WriteAddr=>wb_addr, WriteData=>wb_data, PCin=>id_pc,
+											Reg1Data=>id_reg1, Reg2Data=>id_reg2);
+											
+	id_exe_reg : ID_EXE port map(clk=>clk, rst=>rst, flush_structure=>struct_ins_stall, flush_hazard=>h_stall,
+										  id_reg1=>id_reg1, id_reg2=>id_reg2, id_reg1addr=>id_reg1addr, id_reg2addr=>id_reg2addr,
+										  id_imm=>id_imm, id_regDst=>id_regDst, id_aluSel=>id_alusel, id_memR=>id_memR, 
+										  id_memW=>id_memW, id_regW=>id_regW, id_TW=>id_TW, id_aluOp=>id_aluop, exe_reg1=>exe_reg1,
+										  exe_reg2=>exe_reg2, exe_reg1addr=>exe_reg1addr, exe_reg2addr=>exe_reg2addr, exe_regDst=>exe_regdst,
+										  exe_imm=>exe_imm, exe_aluSel=>exe_alusel, exe_aluOp=>exe_aluop, exe_memR=>exe_memR, exe_memW=>exe_memW,
+										  exe_regW=>exe_regW, exe_TW=>exe_TW, exe_lastLW=>exe_lastLW);
+										
 end Behavioral;
 
