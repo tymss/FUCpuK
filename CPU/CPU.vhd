@@ -38,9 +38,9 @@ entity CPU is
 	ram_data_in : in STD_LOGIC_VECTOR (15 downto 0);  --访存得到的数据
 	ins_addr : out STD_LOGIC_VECTOR (15 downto 0);	--指令地址
 	ram_addr_out : out STD_LOGIC_VECTOR (15 downto 0);  --访存地址
-	ram_memR : out STD_LOGIC_VECTOR;
-	ram_memW : out STD_LOGIC_VECTOR;
-	ram_EN : out STD_LOGIC_VECTOR;
+	ram_memR : out STD_LOGIC;
+	ram_memW : out STD_LOGIC;
+	ram_EN : out STD_LOGIC;
 	ram_data_out : out STD_LOGIC_VECTOR (15 downto 0)  --需要写入内存的数据
 	);
 end CPU;
@@ -257,7 +257,8 @@ architecture Behavioral of CPU is
 	end component;
 			
 begin
-
+		
+	_pcreg : PCReg	port map();
 
 end Behavioral;
 
