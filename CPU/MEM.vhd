@@ -39,8 +39,7 @@ entity MEM is
 			  memR_out : out STD_LOGIC;
 			  memW_out : out STD_LOGIC;
 			  mem_addr_out : out STD_LOGIC_VECTOR (15 downto 0);
-			  mem_data_out : out STD_LOGIC_VECTOR (15 downto 0);
-			  mem_EN : out STD_LOGIC);
+			  mem_data_out : out STD_LOGIC_VECTOR (15 downto 0));
 end MEM;
 
 architecture Behavioral of MEM is
@@ -54,19 +53,14 @@ begin
 			memW_out <= '0';
 			mem_addr_out <= ZeroData;
 			mem_data_out <= ZeroData;
-			mem_EN <= '1';
 		else
 			memR_out <= memR_in;
 			memW_out <= memW_in;
 			if (memR_in = '1') then
-				mem_EN <= '0';
 				mem_addr_out <= mem_addr_in;
 			elsif (memW_in = '1') then
-				mem_EN <= '0';
 				mem_addr_out <= mem_addr_in;
 				mem_data_out <= mem_data_in;
-			else
-				mem_EN <= '1';
 			end if;	
 		end if;
 	end process;
