@@ -82,7 +82,7 @@ begin
 	
 	ins_stall_process : process(memR, memW)
 	begin
-		if ((memR = '1') or (memW = '1')) then
+		if ((memR = '1') or (memW = '1') or (finishLoad = '0')) then
 			ins_ctrl <= '1';
 		else
 			ins_ctrl <= '0';
@@ -135,21 +135,82 @@ begin
 			write_ready <= '0';
 		else
 			if (finishLoad = '1') then
-				if ((memR = '1') and (memW = '1')) then
+				if ((memR = '0') and (memW = '0')) then
 					Ram1Addr <= "00" & ins_addr;
 				else
 					Ram1Addr <= "00" & mem_addr;
 				end if;
-				if ((memR = '1') and (memW = '1')) then
+				if ((memR = '0') and (memW = '0')) then
 					read_ready <= '0';
 					write_ready <= '0';
 					Ram1EN <= '0';
 					Ram1OE <= '0';
 					Ram1Data <= AllZData;
+				elsif (memR = '1') then
+					if (mem_addr = x"bf00") then  --serial port write
+						Ram1EN <= '1';
+						Ram1OE <= '1';
+						Ram1Data <= mem_dataW;
+						read_ready <= '0';
+						write_ready <= '1';
+					else									--mem data write
+						Ram1EN <= '0';
+						Ram1OE <= '1';
+						Ram1Data <= mem_dataW;
+						read_ready <= '0';
+						write_ready <= '0';
+					end if;
+				elsif (memW = '1') then
+					if (mem_addr = x"bf00") then  --serial port read
+						Ram1EN <= '1';
+						Ram1OE <= '1';
+						Ram1Data <= AllZData;
+						read_ready <= '1';
+						write_ready <= '0';
+					elsif (mem_addr = x"bf01") then  --serial check
+						Ram1EN <= '0';
+						Ram1OE <= '1';
+						read_ready <= '0';
+						write_ready <= '0';
+						if ((data_ready = '1') and (tbre = '1') and (tsre = '1')) then  --R and W
+							Ram1Data <= x"0003";
+						elsif ((tbre = '1') and (tsre = '1')) then
+							Ram1Data <= x"0001";
+						elsif (data_ready <= '1') then
+							Ram1Data <= x"0002";
+						else
+							Ram1Data <= ZeroData;
+						end if;
+					else								--read mem
+						Ram1EN <= '0';
+						Ram1OE <= '0';
+						Ram1Data <= AllZData;
+						read_ready <= '0';
+						write_ready <= '0';
+					end if;	
+				else
+					Ram1EN <= '0';
+					Ram1OE <= '1';
+					Ram1Data <= AllZData;
+					read_ready <= '0';
+					write_ready <= '0';
 				end if;	
 			else
 				--¶ÁÈ¡flashData
 			end if;
+		end if;	
+	end process;
+	
+	mem_dataOut <= Ram1Data;
+	
+	ins_process : process(rst, ins_ctrl, Ram1Data, finishLoad)
+	begin
+		if (rst = '0') then
+			ins_out <= NopIns;
+		elsif ((ins_ctrl = '0') and (finishLoad = '1')) then
+			ins_out <= Ram1Data;
+		else
+			ins_out <= NopIns;
 		end if;	
 	end process;
 	
