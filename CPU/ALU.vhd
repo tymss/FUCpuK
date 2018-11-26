@@ -49,9 +49,9 @@ signal temp : STD_LOGIC_VECTOR (15 downto 0);
 	
 begin
 	
-	process(rst, ALUop, oper_1, oper_2)
+	process(rst, ALUop, oper_1, oper_2, temp)
 	begin
-		if (rst = '1') then
+		if (rst = '0') then
 			ALUout <= ZeroData;
 			ALUflag <= '0';
 		else	

@@ -399,7 +399,7 @@ begin
 	branch_controller : BranchControl port map(rst=>rst, b_op=>b_cont, Tdata=>exe_Tout, RegData=>b_rx, sel=>b_target_sel,
 															 jump=>b_jump);
 															 
-	b_target_mux3 : Mux3 port map(sel=>b_target_sel, input0=>id_pc, input1=>pc_imm, input2=>b_rx, output=>pc_in);
+	b_target_mux3 : Mux3 port map(sel=>b_target_sel, input0=>if_pc, input1=>pc_imm, input2=>b_rx, output=>pc_in);
 	
 	process(mem_memR, mem_regdst, id_reg1addr)
 	begin
