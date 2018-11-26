@@ -19,6 +19,8 @@
 ----------------------------------------------------------------------------------
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
+use IEEE.STD_LOGIC_UNSIGNED.ALL;
+use IEEE.STD_LOGIC_ARITH.ALL;
 use WORK.DEFINES.ALL;
 
 -- Uncomment the following library declaration if using
@@ -63,22 +65,106 @@ entity MemTop is
 			 Ram2Data : inout STD_LOGIC_VECTOR (15 downto 0);
 			 Ram2EN : out STD_LOGIC;
 			 Ram2WE : out STD_LOGIC;
-			 Ram2OE : out STD_LOGIC
+			 Ram2OE : out STD_LOGIC;
 			 
-			 --TODO: FLASH PS2 VGA
+			 --Flash
+			 FlashData : inout STD_LOGIC_VECTOR (15 downto 0);
+			 FlashWE : out STD_LOGIC;
+			 FlashOE : out STD_LOGIC;
+			 FlashCE : out STD_LOGIC;
+			 FlashRP : out STD_LOGIC;
+			 FlashByte : out STD_LOGIC;
+			 FlashVpen : out STD_LOGIC;
+			 FlashAddr : out STD_LOGIC_VECTOR (22 downto 1)
+			 --TODO: PS2 VGA
 			 );
 end MemTop;
 
 architecture Behavioral of MemTop is
 	
+	component Flash
+		Port ( clk : in  STD_LOGIC;
+           rst : in  STD_LOGIC;
+           addr_in : in  STD_LOGIC_VECTOR (22 downto 1);
+           Flash_data : inout  STD_LOGIC_VECTOR (15 downto 0);
+           output : out  STD_LOGIC_VECTOR (15 downto 0);
+           finish_read : out  STD_LOGIC;
+           Byte : out  STD_LOGIC;
+           CE : out  STD_LOGIC;
+           WE : out  STD_LOGIC;
+           OE : out  STD_LOGIC;
+           RP : out  STD_LOGIC;
+           Vpen : out  STD_LOGIC;
+           Flash_addr : out  STD_LOGIC_VECTOR (22 downto 1));		
+	end component;
+	
 	signal finishLoad : std_logic;
 	signal write_ready : std_logic;
 	signal read_ready : std_logic;
 	signal ins_ctrl : std_logic;
+
+	signal rst_flash : std_logic;
+	signal clk_2, clk_4, clk_flash : std_logic;  --Flash时钟8分频
+	signal flash_addr_in : std_logic_vector (22 downto 1);
+	signal flash_finish : std_logic;
+	signal flash_out : std_logic_vector (15 downto 0);
+	
+	signal flash_ins_addr : std_logic_vector (15 downto 0);
+	
+	constant flash_ins_num : integer := 100;
 	
 begin
 
-	finishLoad <= '1';  --TODO: FLASH finish
+	--flash时钟分频
+	process(clk)
+	begin
+		if (rising_edge(clk)) then
+			clk_2 <= not clk_2;
+		end if;
+	end process;
+	
+	process(clk_2)
+	begin
+		if (rising_edge(clk_2)) then
+			clk_4 <= not clk_4;
+		end if;
+	end process;
+	
+	process(clk_4)
+	begin
+		if (rising_edge(clk_4)) then
+			clk_flash <= not clk_flash;
+		end if;
+	end process;
+	
+	flash_process : process(clk_flash, rst)
+	begin
+		if (rst = '0') then
+			rst_flash <= '0';
+			flash_addr_in <= (others => '0');
+			finishLoad <= '0';
+			flash_ins_addr <= (others => '0');
+		elsif (rising_edge(clk_flash)) then
+			if (finishLoad = '1') then
+				rst_flash <= '0';
+			else
+				rst_flash <= '1';
+				flash_addr_in <= "000000" & flash_ins_addr;
+				if (flash_finish = '1') then
+					if (flash_ins_addr = flash_ins_num) then
+						finishLoad <= '1';
+						rst_flash <= '0';
+					else
+						flash_ins_addr <= flash_ins_addr + 1;
+					end if;
+				end if;
+			end if;
+		end if;	
+	end process;
+	
+	my_flash : Flash port map(clk=>clk_flash, rst=>rst_flash, addr_in=>flash_addr_in, Flash_data=>FlashData,
+									  output=>flash_out, finish_read=>flash_finish, Byte=>FlashByte, CE=>FlashCE, 
+									  WE=>FlashWE, OE=>FlashOE, RP=>FlashRP, Vpen=>FlashVpen, Flash_addr=>FlashAddr);
 	
 	ins_stall_process : process(memR, memW)
 	begin
@@ -91,11 +177,13 @@ begin
 	
 	ins_stall <= ins_ctrl;
 	
+	
+	
 	Ram1WE_process : process(rst, clk, mem_addr, memW, finishLoad)
 	begin
 		if (rst = '0') then
 			Ram1WE <= '1';
-		elsif ((finishLoad = '1') and (memW = '1')) then
+		elsif (((finishLoad = '1') and (memW = '1')) or (finishLoad = '0')) then
 			Ram1WE <= clk;
 		else
 			Ram1WE <= '1';
@@ -196,7 +284,13 @@ begin
 					write_ready <= '0';
 				end if;	
 			else
-				--读取flashData
+				--写入flash数据
+				Ram1EN <= '0';
+				Ram1OE <= '1';
+				Ram1Addr <= "00" & flash_ins_addr;
+				Ram1Data <= flash_out;
+				read_ready <= '0';
+				write_ready <= '0';
 			end if;
 		end if;	
 	end process;

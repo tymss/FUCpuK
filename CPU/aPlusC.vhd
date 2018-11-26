@@ -50,7 +50,19 @@ entity aPlusC is
 			  Ram2Addr : out STD_LOGIC_VECTOR (17 downto 0);
 			  Ram2EN : out STD_LOGIC;
 			  Ram2WE : out STD_LOGIC;
-			  Ram2OE : out STD_LOGIC);
+			  Ram2OE : out STD_LOGIC;
+			  
+			  --Flash Ïà¹ØÐÅºÅ
+			  FlashData : inout STD_LOGIC_VECTOR (15 downto 0);
+			  FlashAddr : out STD_LOGIC_VECTOR (22 downto 1);
+			  FlashOE : out STD_LOGIC;
+			  FlashCE : out STD_LOGIC;
+			  FlashWE : out STD_LOGIC;
+			  FlashRP : out STD_LOGIC;
+			  FlashByte : out STD_LOGIC;
+			  FlashVpen : out STD_LOGIC
+			  
+			  );
 end aPlusC;
 
 architecture Behavioral of aPlusC is
@@ -104,8 +116,17 @@ architecture Behavioral of aPlusC is
 		Ram2Data : inout STD_LOGIC_VECTOR (15 downto 0);
 		Ram2EN : out STD_LOGIC;
 		Ram2WE : out STD_LOGIC;
-		Ram2OE : out STD_LOGIC			 
+		Ram2OE : out STD_LOGIC;			 
 		
+		--Flash
+		FlashData : inout STD_LOGIC_VECTOR (15 downto 0);
+		FlashWE : out STD_LOGIC;
+		FlashOE : out STD_LOGIC;
+		FlashCE : out STD_LOGIC;
+		FlashRP : out STD_LOGIC;
+		FlashByte : out STD_LOGIC;
+		FlashVpen : out STD_LOGIC;
+		FlashAddr : out STD_LOGIC_VECTOR (22 downto 1)		
 		--TODO: FLASH PS2 VGA
 		);
 	end component;
@@ -128,7 +149,9 @@ begin
 										 memW=>memW, mem_addr=>ram_addr, mem_dataW=>ram_data_w, mem_dataOut=>ram_data_r,
 										 data_ready=>data_ready, tbre=>tbre, tsre=>tsre, Ram1Addr=>Ram1Addr, Ram1Data=>Ram1Data,
 										 Ram1EN=>Ram1EN, Ram1WE=>Ram1WE, Ram1OE=>Ram1OE, rdn=>rdn, wrn=>wrn, Ram2Addr=>Ram2Addr,
-										 Ram2Data=>Ram2Data, Ram2EN=>Ram2EN, Ram2WE=>Ram2WE, Ram2OE=>Ram2OE);
+										 Ram2Data=>Ram2Data, Ram2EN=>Ram2EN, Ram2WE=>Ram2WE, Ram2OE=>Ram2OE, FlashData=>FlashData,
+										 FlashWE=>FlashWE, FlashOE=>FlashOE, FlashCE=>FlashCE, FlashRP=>FlashRP, FlashByte=>FlashByte,
+										 FlashVpen=>FlashVpen, FlashAddr=>FlashAddr);
 											
 	
 end Behavioral;
