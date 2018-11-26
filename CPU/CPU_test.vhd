@@ -168,6 +168,16 @@ BEGIN
 		ins_in <= "0111000000000000"; --CMPI R0 0
 		wait for 20 ns;
 		ins_in <= "0000100000000000"; --NOP
+		wait for 20 ns;
+		ins_in <= "1101100100000000"; --SW R1 R0 0
+		wait for 20 ns;
+		ins_in <= "0000100000000000"; --NOP
+		wait for 20 ns;
+		ins_in <= "1001100100000000"; --LW R1 R0 0
+		wait for 20 ns;
+		ins_in <= "0100100000000001"; --ADDIU R0 1 
+		wait for 20 ns;
+		ins_in <= "0000100000000000";
       -- insert stimulus here 
 
       wait;

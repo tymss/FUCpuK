@@ -56,6 +56,10 @@ begin
 				flush <= '1';
 				stall_pc <= '1';
 				stall_if_id <= '1';
+			else
+				flush <= '0';
+				stall_pc <= '0';
+				stall_if_id <= '0';
 			end if;
 		end if;
 	end process;
