@@ -60,7 +60,10 @@ entity aPlusC is
 			  FlashWE : out STD_LOGIC;
 			  FlashRP : out STD_LOGIC;
 			  FlashByte : out STD_LOGIC;
-			  FlashVpen : out STD_LOGIC
+			  FlashVpen : out STD_LOGIC;
+			  
+			  --Debug
+			  LEDout : out STD_LOGIC_VECTOR (15 downto 0)
 			  
 			  );
 end aPlusC;
@@ -126,8 +129,10 @@ architecture Behavioral of aPlusC is
 		FlashRP : out STD_LOGIC;
 		FlashByte : out STD_LOGIC;
 		FlashVpen : out STD_LOGIC;
-		FlashAddr : out STD_LOGIC_VECTOR (22 downto 1)		
+		FlashAddr : out STD_LOGIC_VECTOR (22 downto 1);		
 		--TODO: FLASH PS2 VGA
+		
+		LEDout : out STD_LOGIC_VECTOR (15 downto 0)
 		);
 	end component;
 	
@@ -151,7 +156,7 @@ begin
 										 Ram1EN=>Ram1EN, Ram1WE=>Ram1WE, Ram1OE=>Ram1OE, rdn=>rdn, wrn=>wrn, Ram2Addr=>Ram2Addr,
 										 Ram2Data=>Ram2Data, Ram2EN=>Ram2EN, Ram2WE=>Ram2WE, Ram2OE=>Ram2OE, FlashData=>FlashData,
 										 FlashWE=>FlashWE, FlashOE=>FlashOE, FlashCE=>FlashCE, FlashRP=>FlashRP, FlashByte=>FlashByte,
-										 FlashVpen=>FlashVpen, FlashAddr=>FlashAddr);
+										 FlashVpen=>FlashVpen, FlashAddr=>FlashAddr, LEDout=>LEDout);
 											
 	
 end Behavioral;

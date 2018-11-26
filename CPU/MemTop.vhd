@@ -75,7 +75,11 @@ entity MemTop is
 			 FlashRP : out STD_LOGIC;
 			 FlashByte : out STD_LOGIC;
 			 FlashVpen : out STD_LOGIC;
-			 FlashAddr : out STD_LOGIC_VECTOR (22 downto 1)
+			 FlashAddr : out STD_LOGIC_VECTOR (22 downto 1);
+			 
+			 --Debug
+			 LEDout : out STD_LOGIC_VECTOR (15 downto 0)
+			 
 			 --TODO: PS2 VGA
 			 );
 end MemTop;
@@ -114,6 +118,9 @@ architecture Behavioral of MemTop is
 	constant flash_ins_num : integer := 100;
 	
 begin
+
+	--DEBUG
+	LEDout <= flash_out;
 
 	--flashÊ±ÖÓ·ÖÆµ
 	process(clk)
@@ -176,8 +183,7 @@ begin
 	end process;
 	
 	ins_stall <= ins_ctrl;
-	
-	
+		
 	
 	Ram1WE_process : process(rst, clk, mem_addr, memW, finishLoad)
 	begin
