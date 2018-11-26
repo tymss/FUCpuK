@@ -177,6 +177,12 @@ BEGIN
 		wait for 20 ns;
 		ins_in <= "0100100000000001"; --ADDIU R0 1 
 		wait for 20 ns;
+		ins_in <= "0000100000000000"; --NOP
+		wait for 20 ns;
+		ins_in <= "1001100100100000"; --LW R1 R1 0
+		wait for 20 ns;
+		ins_in <= "1110100100000000"; --JR R1
+		wait for 20 ns;
 		ins_in <= "0000100000000000";
       -- insert stimulus here 
 

@@ -52,11 +52,14 @@ begin
 			id_pc <= ZeroData;
 			id_ins <= NopIns;
 		elsif (rising_edge(clk)) then
-			if (b_flush = '1') then
-				id_ins <= NopIns;
-			elsif ((stall_structure = '0') and (stall_hazard = '0')) then
-				id_pc <= if_pc;
-				id_ins <= if_ins;
+			if ((stall_structure = '1') or (stall_hazard = '1')) then
+			else
+				if (b_flush = '1') then
+					id_ins <= NopIns;
+				else
+					id_ins <= if_ins;
+					id_pc <= if_pc;
+				end if;	
 			end if;	
 		end if;	
 	end process;
