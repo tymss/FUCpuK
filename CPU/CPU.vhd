@@ -41,7 +41,9 @@ entity CPU is
 	ram_addr_out : out STD_LOGIC_VECTOR (15 downto 0);  --访存地址
 	ram_memR : out STD_LOGIC;
 	ram_memW : out STD_LOGIC;
-	ram_data_out : out STD_LOGIC_VECTOR (15 downto 0)  --需要写入内存的数据
+	ram_data_out : out STD_LOGIC_VECTOR (15 downto 0);  --需要写入内存的数据
+	
+	debug : out STD_LOGIC_VECTOR (15 downto 0)
 	);
 end CPU;
 

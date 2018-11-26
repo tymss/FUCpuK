@@ -75,10 +75,10 @@ entity MemTop is
 			 FlashRP : out STD_LOGIC;
 			 FlashByte : out STD_LOGIC;
 			 FlashVpen : out STD_LOGIC;
-			 FlashAddr : out STD_LOGIC_VECTOR (22 downto 1);
+			 FlashAddr : out STD_LOGIC_VECTOR (22 downto 1)
 			 
 			 --Debug
-			 LEDout : out STD_LOGIC_VECTOR (15 downto 0)
+			 --debug : out STD_LOGIC_VECTOR (15 downto 0)
 			 
 			 --TODO: PS2 VGA
 			 );
@@ -120,7 +120,9 @@ architecture Behavioral of MemTop is
 begin
 
 	--DEBUG
-	LEDout <= flash_out;
+	--debug <= flash_out;
+	finishLoad <= '1';
+
 
 	--flashÊ±ÖÓ·ÖÆµ
 	process(clk)
@@ -144,34 +146,34 @@ begin
 		end if;
 	end process;
 	
-	flash_process : process(clk_flash, rst)
-	begin
-		if (rst = '0') then
-			rst_flash <= '0';
-			flash_addr_in <= (others => '0');
-			finishLoad <= '0';
-			flash_ins_addr <= (others => '0');
-		elsif (rising_edge(clk_flash)) then
-			if (finishLoad = '1') then
-				rst_flash <= '0';
-			else
-				rst_flash <= '1';
-				flash_addr_in <= "000000" & flash_ins_addr;
-				if (flash_finish = '1') then
-					if (flash_ins_addr = flash_ins_num) then
-						finishLoad <= '1';
-						rst_flash <= '0';
-					else
-						flash_ins_addr <= flash_ins_addr + 1;
-					end if;
-				end if;
-			end if;
-		end if;	
-	end process;
-	
-	my_flash : Flash port map(clk=>clk_flash, rst=>rst_flash, addr_in=>flash_addr_in, Flash_data=>FlashData,
-									  output=>flash_out, finish_read=>flash_finish, Byte=>FlashByte, CE=>FlashCE, 
-									  WE=>FlashWE, OE=>FlashOE, RP=>FlashRP, Vpen=>FlashVpen, Flash_addr=>FlashAddr);
+--	flash_process : process(clk_flash, rst)
+--	begin
+--		if (rst = '0') then
+--			rst_flash <= '0';
+--			flash_addr_in <= (others => '0');
+--			finishLoad <= '0';
+--			flash_ins_addr <= (others => '0');
+--		elsif (rising_edge(clk_flash)) then
+--			if (finishLoad = '1') then
+--				rst_flash <= '0';
+--			else
+--				rst_flash <= '1';
+--				flash_addr_in <= "000000" & flash_ins_addr;
+--				if (flash_finish = '1') then
+--					if (flash_ins_addr = flash_ins_num) then
+--						finishLoad <= '1';
+--						rst_flash <= '0';
+--					else
+--						flash_ins_addr <= flash_ins_addr + 1;
+--					end if;
+--				end if;
+--			end if;
+--		end if;	
+--	end process;
+--	
+--	my_flash : Flash port map(clk=>clk_flash, rst=>rst_flash, addr_in=>flash_addr_in, Flash_data=>FlashData,
+--									  output=>flash_out, finish_read=>flash_finish, Byte=>FlashByte, CE=>FlashCE, 
+--									  WE=>FlashWE, OE=>FlashOE, RP=>FlashRP, Vpen=>FlashVpen, Flash_addr=>FlashAddr);
 	
 	ins_stall_process : process(memR, memW)
 	begin

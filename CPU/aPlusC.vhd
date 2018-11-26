@@ -81,7 +81,9 @@ architecture Behavioral of aPlusC is
 		ram_addr_out : out STD_LOGIC_VECTOR (15 downto 0);  --访存地址
 		ram_memR : out STD_LOGIC;
 		ram_memW : out STD_LOGIC;
-		ram_data_out : out STD_LOGIC_VECTOR (15 downto 0)  --需要写入内存的数据
+		ram_data_out : out STD_LOGIC_VECTOR (15 downto 0);  --需要写入内存的数据
+		
+		debug : out STD_LOGIC_VECTOR (15 downto 0)
 		);
 	end component;
 	
@@ -129,10 +131,11 @@ architecture Behavioral of aPlusC is
 		FlashRP : out STD_LOGIC;
 		FlashByte : out STD_LOGIC;
 		FlashVpen : out STD_LOGIC;
-		FlashAddr : out STD_LOGIC_VECTOR (22 downto 1);		
+		FlashAddr : out STD_LOGIC_VECTOR (22 downto 1)		
 		--TODO: FLASH PS2 VGA
 		
-		LEDout : out STD_LOGIC_VECTOR (15 downto 0)
+		
+		--debug : out STD_LOGIC_VECTOR (15 downto 0)
 		);
 	end component;
 	
@@ -148,7 +151,8 @@ architecture Behavioral of aPlusC is
 begin
 	
 	my_cpu : CPU port map(clk=>clk, rst=>rst, struct_ins_stall=>ins_stall, ins_in=>ins, ram_data_in=>ram_data_r,
-								 ins_addr=>ins_addr, ram_addr_out=>ram_addr, ram_memR=>memR, ram_memW=>memW, ram_data_out=>ram_data_w);
+								 ins_addr=>ins_addr, ram_addr_out=>ram_addr, ram_memR=>memR, ram_memW=>memW, ram_data_out=>ram_data_w,
+								 debug=>LEDout);
 								 
 	my_memtop : MemTop port map(clk=>clk, rst=>rst, ins_addr=>ins_addr, ins_out=>ins, ins_stall=>ins_stall, memR=>memR,
 										 memW=>memW, mem_addr=>ram_addr, mem_dataW=>ram_data_w, mem_dataOut=>ram_data_r,
@@ -156,7 +160,7 @@ begin
 										 Ram1EN=>Ram1EN, Ram1WE=>Ram1WE, Ram1OE=>Ram1OE, rdn=>rdn, wrn=>wrn, Ram2Addr=>Ram2Addr,
 										 Ram2Data=>Ram2Data, Ram2EN=>Ram2EN, Ram2WE=>Ram2WE, Ram2OE=>Ram2OE, FlashData=>FlashData,
 										 FlashWE=>FlashWE, FlashOE=>FlashOE, FlashCE=>FlashCE, FlashRP=>FlashRP, FlashByte=>FlashByte,
-										 FlashVpen=>FlashVpen, FlashAddr=>FlashAddr, LEDout=>LEDout);
+										 FlashVpen=>FlashVpen, FlashAddr=>FlashAddr);
 											
 	
 end Behavioral;
