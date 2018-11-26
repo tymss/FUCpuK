@@ -49,8 +49,7 @@ end Flash;
 architecture Behavioral of Flash is
 
 	type states is (
-		state0, state1, state2, state3,
-		state4, state5, state6, state7
+		state0, state1, state2, state3, state4, state5
 	);
 	
 	signal state : states;
@@ -93,13 +92,9 @@ begin
 					output <= Flash_data;
 					state <= state5;
 				when state5 =>
-					state <= state6;
-				when state6 =>
-					state <= state7;
-				when state7 =>
 					state <= state0;
 					finish_read <= '1';
-			end case;
+				end case;
 		end if;
 	end process;
 	
