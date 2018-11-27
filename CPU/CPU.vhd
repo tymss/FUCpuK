@@ -32,6 +32,8 @@ use WORK.DEFINES.ALL;
 
 entity CPU is
 	Port ( 
+	debug : out STD_LOGIC_VECTOR (15 downto 0);
+	
 	clk : in STD_LOGIC;
 	rst : in STD_LOGIC;
 	struct_ins_stall : in STD_LOGIC;   --取指令阶段结构冲突暂停流水
@@ -41,9 +43,9 @@ entity CPU is
 	ram_addr_out : out STD_LOGIC_VECTOR (15 downto 0);  --访存地址
 	ram_memR : out STD_LOGIC;
 	ram_memW : out STD_LOGIC;
-	ram_data_out : out STD_LOGIC_VECTOR (15 downto 0);  --需要写入内存的数据
+	ram_data_out : out STD_LOGIC_VECTOR (15 downto 0)  --需要写入内存的数据
 	
-	debug : out STD_LOGIC_VECTOR (15 downto 0)
+   
 	);
 end CPU;
 
@@ -99,6 +101,7 @@ architecture Behavioral of CPU is
 	
 	component RegFile
 		Port ( 
+		debug : out STD_LOGIC_VECTOR (15 downto 0);
 		clk : in  STD_LOGIC;
 		rst : in  STD_LOGIC;
 		Reg1Addr : in  STD_LOGIC_VECTOR (3 downto 0);
@@ -304,7 +307,7 @@ architecture Behavioral of CPU is
 	signal exe_memW : std_logic;
 	signal exe_regW : std_logic;
 	signal exe_TW : std_logic;
-	signal alusel_out : std_logic_vector (15 downto 0);
+	signal aluoper2_pre : std_logic_vector (15 downto 0);
 	
 	signal alu_sel1 : std_logic_vector (1 downto 0);
 	signal alu_sel2 : std_logic_vector (1 downto 0);
@@ -330,6 +333,9 @@ architecture Behavioral of CPU is
 	
 begin
 		
+	--DEBUG
+	--debug <= pc_out;
+		
 	ins_addr <= pc_out;	
 	
 	pc_reg : PCReg	port map(PCin=>pc_in, clk=>clk, rst=>rst, stall_hazard=>pc_h_stall, 
@@ -347,7 +353,7 @@ begin
 	
 	pc_imm_adder : Adder port map(rst=>rst, oper_1=>id_pc, oper_2=>id_imm, output=>pc_imm);
 	
-	id_regfile : RegFile port map(clk=>clk, rst=>rst, Reg1Addr=>id_reg1addr, Reg2Addr=>id_reg2addr,
+	id_regfile : RegFile port map(debug=>debug, clk=>clk, rst=>rst, Reg1Addr=>id_reg1addr, Reg2Addr=>id_reg2addr,
 											RegWrite=>wb_regW, WriteAddr=>wb_addr, WriteData=>wb_data, PCin=>id_pc,
 											Reg1Data=>id_reg1, Reg2Data=>id_reg2);
 											
@@ -359,7 +365,7 @@ begin
 										  exe_imm=>exe_imm, exe_aluSel=>exe_alusel, exe_aluOp=>exe_aluop, exe_memR=>exe_memR, exe_memW=>exe_memW,
 										  exe_regW=>exe_regW, exe_TW=>exe_TW);
 	
-	aluselector : Mux2 port map(sel=>exe_alusel, input0=>exe_reg2, input1=>exe_imm, output=>alusel_out);
+	aluselector : Mux2 port map(sel=>exe_alusel, input0=>aluoper2_pre, input1=>exe_imm, output=>aluoper2);
 	
 	forward1 : Forward port map(rst=>rst, src_addr=>exe_reg1addr, regW1=>mem_regW, regW2=>wb_regW, reg_dst1=>mem_regdst,
 										 reg_dst2=>wb_addr, sel=>alu_sel1);
@@ -369,13 +375,13 @@ begin
 	
 	aluoper1_sel : Mux3 port map(sel=>alu_sel1, input0=>exe_reg1, input1=>mem_aluout, input2=>wb_data, output=>aluoper1);
 	
-	aluoper2_sel : Mux3 port map(sel=>alu_sel2, input0=>alusel_out, input1=>mem_aluout, input2=>wb_data, output=>aluoper2);
+	aluoper2_sel : Mux3 port map(sel=>alu_sel2, input0=>exe_reg2, input1=>mem_aluout, input2=>wb_data, output=>aluoper2_pre);
 	
 	exe_alu : ALU port map(ALUop=>exe_aluop, rst=>rst, oper_1=>aluoper1, oper_2=>aluoper2, ALUflag=>aluflag, ALUout=>exe_aluout);
 
 	t_reg : TReg port map(Twrite=>exe_TW, clk=>clk, rst=>rst, Tin=>aluflag, Tout=>exe_Tout);
 	
-	exe_mem_reg : EXE_MEM port map(rst=>rst, clk=>clk, exe_aluResult=>exe_aluout, exe_reg2=>exe_reg2, exe_regDst=>exe_regdst,
+	exe_mem_reg : EXE_MEM port map(rst=>rst, clk=>clk, exe_aluResult=>exe_aluout, exe_reg2=>aluoper2_pre, exe_regDst=>exe_regdst,
 											 exe_memW=>exe_memW, exe_memR=>exe_memR, exe_regW=>exe_regW, mem_aluResult=>mem_aluout,
 											 mem_reg2=>mem_reg2, mem_regDst=>mem_regdst, mem_memW=>mem_memW, mem_memR=>mem_memR, mem_regW=>mem_regW);
 											 

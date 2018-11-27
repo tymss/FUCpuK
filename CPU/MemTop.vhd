@@ -115,13 +115,13 @@ architecture Behavioral of MemTop is
 	
 	signal flash_ins_addr : std_logic_vector (15 downto 0);
 	
-	constant flash_ins_num : integer := 100;
+	constant flash_ins_num : integer := 800;
 	
 begin
 
 	--DEBUG
 	--debug <= flash_out;
-	finishLoad <= '1';
+	--finishLoad <= '1';
 
 
 	--flashÊ±ÖÓ·ÖÆµ
@@ -146,34 +146,34 @@ begin
 		end if;
 	end process;
 	
---	flash_process : process(clk_flash, rst)
---	begin
---		if (rst = '0') then
---			rst_flash <= '0';
---			flash_addr_in <= (others => '0');
---			finishLoad <= '0';
---			flash_ins_addr <= (others => '0');
---		elsif (rising_edge(clk_flash)) then
---			if (finishLoad = '1') then
---				rst_flash <= '0';
---			else
---				rst_flash <= '1';
---				flash_addr_in <= "000000" & flash_ins_addr;
---				if (flash_finish = '1') then
---					if (flash_ins_addr = flash_ins_num) then
---						finishLoad <= '1';
---						rst_flash <= '0';
---					else
---						flash_ins_addr <= flash_ins_addr + 1;
---					end if;
---				end if;
---			end if;
---		end if;	
---	end process;
---	
---	my_flash : Flash port map(clk=>clk_flash, rst=>rst_flash, addr_in=>flash_addr_in, Flash_data=>FlashData,
---									  output=>flash_out, finish_read=>flash_finish, Byte=>FlashByte, CE=>FlashCE, 
---									  WE=>FlashWE, OE=>FlashOE, RP=>FlashRP, Vpen=>FlashVpen, Flash_addr=>FlashAddr);
+	flash_process : process(clk_flash, rst)
+	begin
+		if (rst = '0') then
+			rst_flash <= '0';
+			flash_addr_in <= (others => '0');
+			finishLoad <= '0';
+			flash_ins_addr <= (others => '0');
+		elsif (rising_edge(clk_flash)) then
+			if (finishLoad = '1') then
+				rst_flash <= '0';
+			else
+				rst_flash <= '1';
+				flash_addr_in <= "000000" & flash_ins_addr;
+				if (flash_finish = '1') then
+					if (flash_ins_addr = flash_ins_num) then
+						finishLoad <= '1';
+						rst_flash <= '0';
+					else
+						flash_ins_addr <= flash_ins_addr + 1;
+					end if;
+				end if;
+			end if;
+		end if;	
+	end process;
+	
+	my_flash : Flash port map(clk=>clk_flash, rst=>rst_flash, addr_in=>flash_addr_in, Flash_data=>FlashData,
+									  output=>flash_out, finish_read=>flash_finish, Byte=>FlashByte, CE=>FlashCE, 
+									  WE=>FlashWE, OE=>FlashOE, RP=>FlashRP, Vpen=>FlashVpen, Flash_addr=>FlashAddr);
 	
 	ins_stall_process : process(memR, memW)
 	begin

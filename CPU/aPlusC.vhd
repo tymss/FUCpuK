@@ -72,6 +72,8 @@ architecture Behavioral of aPlusC is
 	
 	component CPU
 		Port ( 
+		debug : out STD_LOGIC_VECTOR (15 downto 0);
+		
 		clk : in STD_LOGIC;
 		rst : in STD_LOGIC;
 		struct_ins_stall : in STD_LOGIC;   --取指令阶段结构冲突暂停流水
@@ -81,9 +83,9 @@ architecture Behavioral of aPlusC is
 		ram_addr_out : out STD_LOGIC_VECTOR (15 downto 0);  --访存地址
 		ram_memR : out STD_LOGIC;
 		ram_memW : out STD_LOGIC;
-		ram_data_out : out STD_LOGIC_VECTOR (15 downto 0);  --需要写入内存的数据
+		ram_data_out : out STD_LOGIC_VECTOR (15 downto 0)  --需要写入内存的数据
 		
-		debug : out STD_LOGIC_VECTOR (15 downto 0)
+		
 		);
 	end component;
 	
@@ -148,13 +150,37 @@ architecture Behavioral of aPlusC is
 	signal memR : std_logic;
 	signal memW : std_logic;
 	
+	signal clk_2, clk_4, clk_8 : std_logic;
+	
 begin
 	
-	my_cpu : CPU port map(clk=>clk, rst=>rst, struct_ins_stall=>ins_stall, ins_in=>ins, ram_data_in=>ram_data_r,
-								 ins_addr=>ins_addr, ram_addr_out=>ram_addr, ram_memR=>memR, ram_memW=>memW, ram_data_out=>ram_data_w,
-								 debug=>LEDout);
+	--LEDout <= ins_addr(12 downto 0) & data_ready & tbre & tsre;
+	
+	process(clk)
+	begin
+		if (rising_edge(clk)) then
+			clk_2 <= not clk_2;
+		end if;
+	end process;
+	
+	process(clk_2)
+	begin
+		if (rising_edge(clk_2)) then
+			clk_4 <= not clk_4;
+		end if;
+	end process;
+	
+	process(clk_4)
+	begin
+		if (rising_edge(clk_4)) then
+			clk_8 <= not clk_8;
+		end if;
+	end process;
+	
+	my_cpu : CPU port map(debug=>LEDout, clk=>clk_8, rst=>rst, struct_ins_stall=>ins_stall, ins_in=>ins, ram_data_in=>ram_data_r,
+								 ins_addr=>ins_addr, ram_addr_out=>ram_addr, ram_memR=>memR, ram_memW=>memW, ram_data_out=>ram_data_w);
 								 
-	my_memtop : MemTop port map(clk=>clk, rst=>rst, ins_addr=>ins_addr, ins_out=>ins, ins_stall=>ins_stall, memR=>memR,
+	my_memtop : MemTop port map(clk=>clk_8, rst=>rst, ins_addr=>ins_addr, ins_out=>ins, ins_stall=>ins_stall, memR=>memR,
 										 memW=>memW, mem_addr=>ram_addr, mem_dataW=>ram_data_w, mem_dataOut=>ram_data_r,
 										 data_ready=>data_ready, tbre=>tbre, tsre=>tsre, Ram1Addr=>Ram1Addr, Ram1Data=>Ram1Data,
 										 Ram1EN=>Ram1EN, Ram1WE=>Ram1WE, Ram1OE=>Ram1OE, rdn=>rdn, wrn=>wrn, Ram2Addr=>Ram2Addr,
