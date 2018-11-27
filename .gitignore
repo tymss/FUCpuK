@@ -3,5 +3,4 @@ CPU/*
 !CPU/_xmsgs/
 !CPU/iseconfig/
 !CPU/CPU.xise
-!CPU/planAhead*
 !CPU/aPlusC.ucf
