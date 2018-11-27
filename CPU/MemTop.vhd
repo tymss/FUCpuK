@@ -189,7 +189,7 @@ begin
 	
 	Ram1WE_process : process(rst, clk, mem_addr, memW, finishLoad)
 	begin
-		if (rst = '0') then
+		if ((rst = '0') or (mem_addr = x"bf00") or (mem_addr = x"bf01")) then
 			Ram1WE <= '1';
 		elsif (((finishLoad = '1') and (memW = '1')) or (finishLoad = '0')) then
 			Ram1WE <= clk;
@@ -220,7 +220,7 @@ begin
 		end if;	
 	end process;
 	
-	Ram1_process : process(rst, ins_addr, mem_addr, memR, memW, mem_dataW, data_ready, tbre, tsre, finishLoad)
+	Ram1_process : process(rst, ins_addr, mem_addr, memR, memW, mem_dataW, data_ready, tbre, tsre, finishLoad, flash_out, flash_ins_addr)
 	begin
 		if (rst = '0') then
 			Ram1EN <= '0';
@@ -233,30 +233,13 @@ begin
 			if (finishLoad = '1') then
 				if ((memR = '0') and (memW = '0')) then
 					Ram1Addr <= "00" & ins_addr;
-				else
-					Ram1Addr <= "00" & mem_addr;
-				end if;
-				if ((memR = '0') and (memW = '0')) then
 					read_ready <= '0';
 					write_ready <= '0';
 					Ram1EN <= '0';
 					Ram1OE <= '0';
 					Ram1Data <= AllZData;
 				elsif (memR = '1') then
-					if (mem_addr = x"bf00") then  --serial port write
-						Ram1EN <= '1';
-						Ram1OE <= '1';
-						Ram1Data <= mem_dataW;
-						read_ready <= '0';
-						write_ready <= '1';
-					else									--mem data write
-						Ram1EN <= '0';
-						Ram1OE <= '1';
-						Ram1Data <= mem_dataW;
-						read_ready <= '0';
-						write_ready <= '0';
-					end if;
-				elsif (memW = '1') then
+					Ram1Addr <= "00" & mem_addr;
 					if (mem_addr = x"bf00") then  --serial port read
 						Ram1EN <= '1';
 						Ram1OE <= '1';
@@ -270,9 +253,9 @@ begin
 						write_ready <= '0';
 						if ((data_ready = '1') and (tbre = '1') and (tsre = '1')) then  --R and W
 							Ram1Data <= x"0003";
-						elsif ((tbre = '1') and (tsre = '1')) then
+						elsif ((tbre = '1') and (tsre = '1')) then --W
 							Ram1Data <= x"0001";
-						elsif (data_ready <= '1') then
+						elsif (data_ready <= '1') then --R
 							Ram1Data <= x"0002";
 						else
 							Ram1Data <= ZeroData;
@@ -283,7 +266,22 @@ begin
 						Ram1Data <= AllZData;
 						read_ready <= '0';
 						write_ready <= '0';
-					end if;	
+					end if;
+				elsif (memW = '1') then
+					Ram1Addr <= "00" & mem_addr;
+					if (mem_addr = x"bf00") then  --serial port write
+						Ram1EN <= '1';
+						Ram1OE <= '1';
+						Ram1Data <= mem_dataW;
+						read_ready <= '0';
+						write_ready <= '1';
+					else									--mem data write
+						Ram1EN <= '0';
+						Ram1OE <= '1';
+						Ram1Data <= mem_dataW;
+						read_ready <= '0';
+						write_ready <= '0';
+					end if;
 				else
 					Ram1EN <= '0';
 					Ram1OE <= '1';
