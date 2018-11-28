@@ -141,6 +141,18 @@ architecture Behavioral of aPlusC is
 		);
 	end component;
 	
+	COMPONENT TimeMachine
+	PORT(
+		CLKIN_IN : IN std_logic;
+		RST_IN : IN std_logic;          
+		CLKFX_OUT : OUT std_logic;
+		CLKIN_IBUFG_OUT : OUT std_logic;
+		CLK0_OUT : OUT std_logic;
+		LOCKED_OUT : OUT std_logic
+		);
+	END COMPONENT;
+	
+	
 	signal ins_stall : std_logic;
 	signal ins : std_logic_vector (15 downto 0);
 	signal ram_data_r : std_logic_vector (15 downto 0);
@@ -150,44 +162,51 @@ architecture Behavioral of aPlusC is
 	signal memR : std_logic;
 	signal memW : std_logic;
 	
-	signal clk_2, clk_4, clk_8, clk_16 : std_logic;
+	--signal clk_2, clk_4, clk_8, clk_16 : std_logic;
+	signal my_clk : std_logic;
+	
+	signal fakerst : std_logic;
 	
 begin
 	
 	--LEDout <= ins_addr(12 downto 0) & data_ready & tbre & tsre;
 	
-	process(clk)
-	begin
-		if (rising_edge(clk)) then
-			clk_2 <= not clk_2;
-		end if;
-	end process;
+--	process(clk)
+--	begin
+--		if (rising_edge(clk)) then
+--			clk_2 <= not clk_2;
+--		end if;
+--	end process;
+--	
+--	process(clk_2)
+--	begin
+--		if (rising_edge(clk_2)) then
+--			clk_4 <= not clk_4;
+--		end if;
+--	end process;
+--	
+--	process(clk_4)
+--	begin
+--		if (rising_edge(clk_4)) then
+--			clk_8 <= not clk_8;
+--		end if;
+--	end process;
+--	
+--	process(clk_8)
+--	begin
+--		if (rising_edge(clk_8)) then
+--			clk_16 <= not clk_16;
+--		end if;
+--	end process;
 	
-	process(clk_2)
-	begin
-		if (rising_edge(clk_2)) then
-			clk_4 <= not clk_4;
-		end if;
-	end process;
+	fakerst <= '0';
 	
-	process(clk_4)
-	begin
-		if (rising_edge(clk_4)) then
-			clk_8 <= not clk_8;
-		end if;
-	end process;
+	my_dcm : TimeMachine port map(CLKIN_IN=>clk, RST_IN=>fakerst, CLKFX_OUT=>my_clk);
 	
-	process(clk_8)
-	begin
-		if (rising_edge(clk_8)) then
-			clk_16 <= not clk_16;
-		end if;
-	end process;
-	
-	my_cpu : CPU port map(debug=>LEDout, clk=>clk_16, rst=>rst, struct_ins_stall=>ins_stall, ins_in=>ins, ram_data_in=>ram_data_r,
+	my_cpu : CPU port map(debug=>LEDout, clk=>my_clk, rst=>rst, struct_ins_stall=>ins_stall, ins_in=>ins, ram_data_in=>ram_data_r,
 								 ins_addr=>ins_addr, ram_addr_out=>ram_addr, ram_memR=>memR, ram_memW=>memW, ram_data_out=>ram_data_w);
 								 
-	my_memtop : MemTop port map(clk=>clk_16, rst=>rst, ins_addr=>ins_addr, ins_out=>ins, ins_stall=>ins_stall, memR=>memR,
+	my_memtop : MemTop port map(clk=>my_clk, rst=>rst, ins_addr=>ins_addr, ins_out=>ins, ins_stall=>ins_stall, memR=>memR,
 										 memW=>memW, mem_addr=>ram_addr, mem_dataW=>ram_data_w, mem_dataOut=>ram_data_r,
 										 data_ready=>data_ready, tbre=>tbre, tsre=>tsre, Ram1Addr=>Ram1Addr, Ram1Data=>Ram1Data,
 										 Ram1EN=>Ram1EN, Ram1WE=>Ram1WE, Ram1OE=>Ram1OE, rdn=>rdn, wrn=>wrn, Ram2Addr=>Ram2Addr,
