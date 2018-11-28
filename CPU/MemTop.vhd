@@ -255,7 +255,7 @@ begin
 							Ram1Data <= x"0003";
 						elsif ((tbre = '1') and (tsre = '1')) then --W
 							Ram1Data <= x"0001";
-						elsif (data_ready <= '1') then --R
+						elsif (data_ready = '1') then --R
 							Ram1Data <= x"0002";
 						else
 							Ram1Data <= ZeroData;

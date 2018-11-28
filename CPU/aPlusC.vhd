@@ -150,7 +150,7 @@ architecture Behavioral of aPlusC is
 	signal memR : std_logic;
 	signal memW : std_logic;
 	
-	signal clk_2, clk_4, clk_8 : std_logic;
+	signal clk_2, clk_4, clk_8, clk_16 : std_logic;
 	
 begin
 	
@@ -177,10 +177,17 @@ begin
 		end if;
 	end process;
 	
-	my_cpu : CPU port map(debug=>LEDout, clk=>clk_8, rst=>rst, struct_ins_stall=>ins_stall, ins_in=>ins, ram_data_in=>ram_data_r,
+	process(clk_8)
+	begin
+		if (rising_edge(clk_8)) then
+			clk_16 <= not clk_16;
+		end if;
+	end process;
+	
+	my_cpu : CPU port map(debug=>LEDout, clk=>clk_16, rst=>rst, struct_ins_stall=>ins_stall, ins_in=>ins, ram_data_in=>ram_data_r,
 								 ins_addr=>ins_addr, ram_addr_out=>ram_addr, ram_memR=>memR, ram_memW=>memW, ram_data_out=>ram_data_w);
 								 
-	my_memtop : MemTop port map(clk=>clk_8, rst=>rst, ins_addr=>ins_addr, ins_out=>ins, ins_stall=>ins_stall, memR=>memR,
+	my_memtop : MemTop port map(clk=>clk_16, rst=>rst, ins_addr=>ins_addr, ins_out=>ins, ins_stall=>ins_stall, memR=>memR,
 										 memW=>memW, mem_addr=>ram_addr, mem_dataW=>ram_data_w, mem_dataOut=>ram_data_r,
 										 data_ready=>data_ready, tbre=>tbre, tsre=>tsre, Ram1Addr=>Ram1Addr, Ram1Data=>Ram1Data,
 										 Ram1EN=>Ram1EN, Ram1WE=>Ram1WE, Ram1OE=>Ram1OE, rdn=>rdn, wrn=>wrn, Ram2Addr=>Ram2Addr,
