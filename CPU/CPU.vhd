@@ -77,7 +77,6 @@ architecture Behavioral of CPU is
 		if_ins : in  STD_LOGIC_VECTOR (15 downto 0); 
 		stall_structure : in  STD_LOGIC;
 		stall_hazard : in  STD_LOGIC;
-		b_flush : in  STD_LOGIC;
 		id_pc : out  STD_LOGIC_VECTOR (15 downto 0);
 		id_ins : out  STD_LOGIC_VECTOR (15 downto 0));
 	end component;
@@ -235,8 +234,7 @@ architecture Behavioral of CPU is
 		b_op : in  STD_LOGIC_VECTOR (2 downto 0);
 		Tdata : in  STD_LOGIC;
 		RegData : in  STD_LOGIC_VECTOR (15 downto 0);
-		sel : out  STD_LOGIC_VECTOR (1 downto 0);
-		jump : out STD_LOGIC);
+		sel : out  STD_LOGIC_VECTOR (1 downto 0));
 	end component;
 
 	component Forward
@@ -270,7 +268,6 @@ architecture Behavioral of CPU is
 	signal pc_out : std_logic_vector (15 downto 0);	
 	signal if_pc : std_logic_vector (15 downto 0);
 	
-	signal b_jump : std_logic;
 	signal b_cont : std_logic_vector (2 downto 0);
 	signal b_f_sel : std_logic_vector (1 downto 0);
 	signal b_f_out : std_logic_vector (15 downto 0);
@@ -345,7 +342,7 @@ begin
 	
 	if_id_reg : IF_ID port map(clk=>clk, rst=>rst, if_pc=>if_pc, if_ins=>ins_in, 
 										stall_structure=>struct_ins_stall, stall_hazard=>ifid_h_stall,
-										b_flush=>b_jump, id_pc=>id_pc, id_ins=>id_ins);
+										id_pc=>id_pc, id_ins=>id_ins);
 	
 	id_decoder : Decoder port map(rst=>rst, ins=>id_ins, reg1=>id_reg1addr, reg2=>id_reg2addr,
 											aluOp=>id_aluop, imm=>id_imm, regDst=>id_regDst, aluSel=>id_alusel,
@@ -404,8 +401,7 @@ begin
 	
 	b_rx_mux2 : Mux2 port map(sel=>b_last_lw, input0=>b_f_out, input1=>ram_data_in, output=>b_rx);
 	
-	branch_controller : BranchControl port map(rst=>rst, b_op=>b_cont, Tdata=>exe_Tout, RegData=>b_rx, sel=>b_target_sel,
-															 jump=>b_jump);
+	branch_controller : BranchControl port map(rst=>rst, b_op=>b_cont, Tdata=>exe_Tout, RegData=>b_rx, sel=>b_target_sel);
 															 
 	b_target_mux3 : Mux3 port map(sel=>b_target_sel, input0=>if_pc, input1=>pc_imm, input2=>b_rx, output=>pc_in);
 	

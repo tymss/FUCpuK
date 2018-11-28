@@ -37,7 +37,6 @@ entity IF_ID is
            if_ins : in  STD_LOGIC_VECTOR (15 downto 0);
            stall_structure : in  STD_LOGIC;
            stall_hazard : in  STD_LOGIC;
-           b_flush : in  STD_LOGIC;
            id_pc : out  STD_LOGIC_VECTOR (15 downto 0);
            id_ins : out  STD_LOGIC_VECTOR (15 downto 0));
 end IF_ID;
@@ -54,12 +53,8 @@ begin
 		elsif (rising_edge(clk)) then
 			if ((stall_structure = '1') or (stall_hazard = '1')) then
 			else
-				if (b_flush = '1') then
-					id_ins <= NopIns;
-				else
-					id_ins <= if_ins;
-					id_pc <= if_pc;
-				end if;	
+				id_ins <= if_ins;
+				id_pc <= if_pc;
 			end if;	
 		end if;	
 	end process;
