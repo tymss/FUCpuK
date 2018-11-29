@@ -32,7 +32,7 @@ use WORK.DEFINES.ALL;
 
 entity RegFile is
     Port ( 
-			  debug : out STD_LOGIC_VECTOR (15 downto 0);		
+			  --debug : out STD_LOGIC_VECTOR (15 downto 0);		
 				
 			  clk : in  STD_LOGIC;
            rst : in  STD_LOGIC;
@@ -62,7 +62,7 @@ architecture Behavioral of RegFile is
 	
 begin
 
-	debug <= out3;
+	--debug <= out3;
 	
 	r0 : Reg port map(WriteData, w_con(0), clk, rst, out0);
 	r1 : Reg port map(WriteData, w_con(1), clk, rst, out1);
