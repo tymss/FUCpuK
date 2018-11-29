@@ -82,8 +82,10 @@ entity MemTop is
 			 VGAData : out STD_LOGIC_VECTOR (15 downto 0);
 			 GPUPos : out STD_LOGIC_VECTOR (15 downto 0);
 			 GPUData : out STD_LOGIC_VECTOR (15 downto 0);
-			 GPUWrite : out STD_LOGIC
+			 GPUWrite : out STD_LOGIC;
 			 
+			 --Keyboard
+			 PS2input : in STD_LOGIC_VECTOR (15 downto 0)
 			 --Debug
 			 --debug : out STD_LOGIC_VECTOR (15 downto 0)
 
@@ -264,6 +266,12 @@ begin
 						else
 							Ram1Data <= ZeroData;
 						end if;
+					elsif (mem_addr = x"bf0e") then  --keyboard
+						Ram1EN <= '0';
+						Ram1OE <= '1';
+						Ram1Data <= PS2input;
+						read_ready <= '0';
+						write_ready <= '0';
 					else								--read mem
 						Ram1EN <= '0';
 						Ram1OE <= '0';

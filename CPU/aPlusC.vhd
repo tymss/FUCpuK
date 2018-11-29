@@ -149,8 +149,10 @@ architecture Behavioral of aPlusC is
 		VGAData : out STD_LOGIC_VECTOR (15 downto 0);
 		GPUPos : out STD_LOGIC_VECTOR (15 downto 0);
 		GPUData : out STD_LOGIC_VECTOR (15 downto 0);
-		GPUWrite : out STD_LOGIC
-		--TODO: PS2
+		GPUWrite : out STD_LOGIC;
+		
+		--PS2
+		PS2input : in STD_LOGIC_VECTOR (15 downto 0)
 		--debug : out STD_LOGIC_VECTOR (15 downto 0)
 		);
 	end component;
@@ -226,6 +228,9 @@ architecture Behavioral of aPlusC is
 	
 	signal gpu_pos_l : std_logic_vector (11 downto 0);
 	signal gpu_data_l : std_logic_vector (15 downto 0);
+	
+	signal ps2_out : std_logic_vector (15 downto 0);
+	
 begin
 	
 	--LEDout <= ins_addr(12 downto 0) & data_ready & tbre & tsre;
@@ -256,7 +261,7 @@ begin
 										 Ram2Data=>Ram2Data, Ram2EN=>Ram2EN, Ram2WE=>Ram2WE, Ram2OE=>Ram2OE, FlashData=>FlashData,
 										 FlashWE=>FlashWE, FlashOE=>FlashOE, FlashCE=>FlashCE, FlashRP=>FlashRP, FlashByte=>FlashByte,
 										 FlashVpen=>FlashVpen, FlashAddr=>FlashAddr, VGAAddr=>vga_addr, VGAData=>vga_data, GPUPos=>gpu_pos_pre,
-										 GPUData=>gpu_data_s, GPUWrite=>gpu_write);
+										 GPUData=>gpu_data_s, GPUWrite=>gpu_write, PS2input=>ps2_out);
 										 
 	my_vga : VGA port map(clk=>my_clk, gpu_pos=>gpu_pos_l, gpu_data=>gpu_data_l, ram_data=>vga_data, ram_addr=>vga_addr,
 								 HS=>VGAHS, VS=>VGAVS, R=>VGAR, G=>VGAG, B=>VGAB);
