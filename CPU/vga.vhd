@@ -12,10 +12,10 @@ entity vga is
     -- gpu position
     gpu_pos : out std_logic_vector(11 downto 0);
     -- data from gpu according to gpu 
-    gpu_data : in std_logic_vector(7 downto 0);
+    gpu_data : in std_logic_vector(15 downto 0);
     
     -- data from ram2
-    ram_data : in std_logic_vector(11 downto 0);
+    ram_data : in std_logic_vector(15 downto 0);
     -- ram2 address
     ram_addr : out std_logic_vector(17 downto 0);
     
@@ -98,7 +98,7 @@ begin
   B_block <= conv_integer(current_block(9 downto 7));
 
   -- request ram_addr
-  ram_addr <= start_addr + conv_integer(gpu_data(7 downto 0)) * img_size + pixel_x + pixel_y * 8;
+  ram_addr <= start_addr + conv_integer(gpu_data(11 downto 0)) * img_size + pixel_x + pixel_y * 8;
 
   display: process(H_count, V_count, ram_data)
   begin
