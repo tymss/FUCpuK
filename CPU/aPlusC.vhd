@@ -64,6 +64,13 @@ entity aPlusC is
 			  FlashByte : out STD_LOGIC;
 			  FlashVpen : out STD_LOGIC;
 			  
+			  --VGA Ïà¹ØÐÅºÅ
+			  VGAHS : out STD_LOGIC;
+			  VGAVS : out STD_LOGIC;
+			  VGAR : out STD_LOGIC_VECTOR (2 downto 0);
+			  VGAG : out STD_LOGIC_VECTOR (2 downto 0);
+			  VGAB : out STD_LOGIC_VECTOR (2 downto 0);
+			  
 			  --Debug
 			  LEDout : out STD_LOGIC_VECTOR (15 downto 0)
 			  
@@ -143,10 +150,33 @@ architecture Behavioral of aPlusC is
 		GPUPos : out STD_LOGIC_VECTOR (15 downto 0);
 		GPUData : out STD_LOGIC_VECTOR (15 downto 0);
 		GPUWrite : out STD_LOGIC
-
 		--TODO: PS2
 		--debug : out STD_LOGIC_VECTOR (15 downto 0)
 		);
+	end component;
+	
+	component vga
+	  port(
+		 clk : in std_logic;
+
+		 -- gpu position
+		 gpu_pos : out std_logic_vector(11 downto 0);
+		 -- data from gpu according to gpu 
+		 gpu_data : in std_logic_vector(7 downto 0);
+		 
+		 -- data from ram2
+		 ram_data : in std_logic_vector(11 downto 0);
+		 -- ram2 address
+		 ram_addr : out std_logic_vector(17 downto 0);
+		 
+		 -- synchro signal
+		 HS, VS : out std_logic;
+
+		 -- colour
+		 R : out std_logic_vector(2 downto 0);
+		 G : out std_logic_vector(2 downto 0);
+		 B : out std_logic_vector(2 downto 0)
+	);
 	end component;
 	
 	COMPONENT TimeMachine
@@ -183,6 +213,8 @@ architecture Behavioral of aPlusC is
 	signal gpu_write : std_logic;
 	signal gpu_we : std_logic;
 	
+	signal gpu_pos_l : std_logic_vector (11 downto 0);
+	signal gpu_data_l : std_logic_vector (7 downto 0);
 	
 begin
 	
@@ -213,9 +245,11 @@ begin
 										 Ram1EN=>Ram1EN, Ram1WE=>Ram1WE, Ram1OE=>Ram1OE, rdn=>rdn, wrn=>wrn, Ram2Addr=>Ram2Addr,
 										 Ram2Data=>Ram2Data, Ram2EN=>Ram2EN, Ram2WE=>Ram2WE, Ram2OE=>Ram2OE, FlashData=>FlashData,
 										 FlashWE=>FlashWE, FlashOE=>FlashOE, FlashCE=>FlashCE, FlashRP=>FlashRP, FlashByte=>FlashByte,
-										 FlashVpen=>FlashVpen, FlashAddr=>FlashAddr, VGAAddr=>vga_addr, VGAData=>vga_data, GPUPos=>gpu_pos_s,
-										 GPUData=>gpu_data_pre, GPUWrite=>gpu_write);
-	
+										 FlashVpen=>FlashVpen, FlashAddr=>FlashAddr, VGAAddr=>vga_addr, VGAData=>vga_data, GPUPos=>gpu_pos_pre,
+										 GPUData=>gpu_data_s, GPUWrite=>gpu_write);
+										 
+	my_vga : VGA port map(clk=>my_clk, gpu_pos=>gpu_pos_l, gpu_data=>gpu_data_l, ram_data=>vga_data(11 downto 0), ram_addr=>vga_addr,
+								 HS=>VGAHS, VS=>VGAVS, R=>VGAR, G=>VGAG, B=>VGAB);
 	
 end Behavioral;
 
