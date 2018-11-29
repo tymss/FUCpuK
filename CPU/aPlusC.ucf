@@ -1,5 +1,4 @@
 
-# PlanAhead Generated physical constraints 
 
 NET "FlashAddr[22]" LOC = K4;
 NET "FlashAddr[21]" LOC = K5;
@@ -142,3 +141,17 @@ NET "rst" LOC = U10;
 NET "tbre" LOC = D14;
 NET "tsre" LOC = N9;
 NET "wrn" LOC = U5;
+
+# PlanAhead Generated physical constraints 
+
+NET "VGAHS" LOC = D6;
+NET "VGAVS" LOC = E6;
+NET "VGAB[2]" LOC = B6;
+NET "VGAB[1]" LOC = A6;
+NET "VGAB[0]" LOC = D5;
+NET "VGAG[2]" LOC = C5;
+NET "VGAG[1]" LOC = C4;
+NET "VGAG[0]" LOC = B4;
+NET "VGAR[2]" LOC = A4;
+NET "VGAR[1]" LOC = C3;
+NET "VGAR[0]" LOC = A7;

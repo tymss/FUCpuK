@@ -75,12 +75,18 @@ entity MemTop is
 			 FlashRP : out STD_LOGIC;
 			 FlashByte : out STD_LOGIC;
 			 FlashVpen : out STD_LOGIC;
-			 FlashAddr : out STD_LOGIC_VECTOR (22 downto 1)
+			 FlashAddr : out STD_LOGIC_VECTOR (22 downto 1);
+			 
+			 --VGA
+			 VGAAddr : in STD_LOGIC_VECTOR (17 downto 0);
+			 VGAData : out STD_LOGIC_VECTOR (15 downto 0);
+			 GPUPos : out STD_LOGIC_VECTOR (15 downto 0);
+			 GPUData : out STD_LOGIC_VECTOR (15 downto 0);
+			 GPUWrite : out STD_LOGIC
 			 
 			 --Debug
 			 --debug : out STD_LOGIC_VECTOR (15 downto 0)
-			 
-			 --TODO: PS2 VGA
+
 			 );
 end MemTop;
 
@@ -121,7 +127,6 @@ begin
 	--DEBUG
 	--debug <= flash_out;
 	--finishLoad <= '1';
-
 
 	--flashÊ±ÖÓ·ÖÆµ
 	process(clk)
@@ -188,7 +193,7 @@ begin
 	
 	Ram1WE_process : process(rst, clk, mem_addr, memW, finishLoad)
 	begin
-		if ((rst = '0') or (mem_addr = x"bf00") or (mem_addr = x"bf01")) then
+		if ((rst = '0') or (mem_addr = x"bf00") or (mem_addr = x"bf01") or (mem_addr = x"bf0a") or (mem_addr = x"bf0d")) then
 			Ram1WE <= '1';
 		elsif (((finishLoad = '1') and (memW = '1')) or (finishLoad = '0')) then
 			Ram1WE <= clk;
@@ -274,6 +279,18 @@ begin
 						Ram1Data <= mem_dataW;
 						read_ready <= '0';
 						write_ready <= '1';
+					elsif (mem_addr = x"bf0a") then  --write gpu pos
+						Ram1EN <= '0';
+						Ram1OE <= '1';
+						GPUPos <= mem_dataW;
+						read_ready <= '0';
+						write_ready <= '0';
+					elsif (mem_addr = x"bf0d") then  --write gpu data
+						Ram1EN <= '0';
+						Ram1OE <= '1';
+						GPUData <= mem_dataW;
+						read_ready <= '0';
+						write_ready <= '0';
 					else									--mem data write
 						Ram1EN <= '0';
 						Ram1OE <= '1';
@@ -311,6 +328,36 @@ begin
 		else
 			ins_out <= NopIns;
 		end if;	
+	end process;
+	
+	--RAM2 for VGA
+	Ram2EN <= '0';
+	Ram2WE <= '1';
+	
+	Ram2_process : process(rst, finishLoad, VGAAddr)
+	begin
+		if (rst = '0') then
+			Ram2OE <= '1';
+			Ram2Addr <= "00" & ZeroData;
+			Ram2Data <= AllZData;
+		elsif (finishLoad = '1') then
+			Ram2OE <= '0';
+			Ram2Addr <= VGAAddr;
+			Ram2Data <= AllZData;
+		end if;	
+	end process;
+	
+	VGAData <= Ram2Data;
+	
+	gpu_ctrl_process : process(rst, memW, mem_addr)
+	begin
+		if (rst = '0') then
+			GPUWrite <= '0';
+		elsif ((memW = '1') and (mem_addr = x"bf0d")) then
+			GPUWrite <= '1';
+		else 
+			GPUWrite <= '0';
+		end if;
 	end process;
 	
 end Behavioral;
