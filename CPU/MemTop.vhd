@@ -101,7 +101,6 @@ architecture Behavioral of MemTop is
            Vpen : out  STD_LOGIC;
            Flash_addr : out  STD_LOGIC_VECTOR (22 downto 1));		
 	end component;
-	
 	signal finishLoad : std_logic;
 	signal write_ready : std_logic;
 	signal read_ready : std_logic;

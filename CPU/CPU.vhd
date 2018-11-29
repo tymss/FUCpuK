@@ -45,7 +45,6 @@ entity CPU is
 	ram_memW : out STD_LOGIC;
 	ram_data_out : out STD_LOGIC_VECTOR (15 downto 0)  --需要写入内存的数据
 	
-   
 	);
 end CPU;
 

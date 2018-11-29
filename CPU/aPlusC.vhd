@@ -162,7 +162,7 @@ architecture Behavioral of aPlusC is
 	signal memR : std_logic;
 	signal memW : std_logic;
 	
-	--signal clk_2, clk_4, clk_8, clk_16 : std_logic;
+	signal clk_2, clk_4, clk_8, clk_16 : std_logic;
 	signal my_clk : std_logic;
 	
 	signal fakerst : std_logic;
@@ -171,38 +171,38 @@ begin
 	
 	--LEDout <= ins_addr(12 downto 0) & data_ready & tbre & tsre;
 	
---	process(clk)
---	begin
---		if (rising_edge(clk)) then
---			clk_2 <= not clk_2;
---		end if;
---	end process;
---	
---	process(clk_2)
---	begin
---		if (rising_edge(clk_2)) then
---			clk_4 <= not clk_4;
---		end if;
---	end process;
---	
---	process(clk_4)
---	begin
---		if (rising_edge(clk_4)) then
---			clk_8 <= not clk_8;
---		end if;
---	end process;
---	
---	process(clk_8)
---	begin
---		if (rising_edge(clk_8)) then
---			clk_16 <= not clk_16;
---		end if;
---	end process;
+	process(clk)
+	begin
+		if (rising_edge(clk)) then
+			clk_2 <= not clk_2;
+		end if;
+	end process;
+	
+	process(clk_2)
+	begin
+		if (rising_edge(clk_2)) then
+			clk_4 <= not clk_4;
+		end if;
+	end process;
+	
+	process(clk_4)
+	begin
+		if (rising_edge(clk_4)) then
+			clk_8 <= not clk_8;
+		end if;
+	end process;
+	
+	process(clk_8)
+	begin
+		if (rising_edge(clk_8)) then
+			clk_16 <= not clk_16;
+		end if;
+	end process;
 	
 	fakerst <= '0';
 	
 	my_dcm : TimeMachine port map(CLKIN_IN=>clk, RST_IN=>fakerst, CLKFX_OUT=>my_clk);
-	
+
 	my_cpu : CPU port map(debug=>LEDout, clk=>my_clk, rst=>rst, struct_ins_stall=>ins_stall, ins_in=>ins, ram_data_in=>ram_data_r,
 								 ins_addr=>ins_addr, ram_addr_out=>ram_addr, ram_memR=>memR, ram_memW=>memW, ram_data_out=>ram_data_w);
 								 
