@@ -32,7 +32,7 @@ use WORK.DEFINES.ALL;
 
 entity CPU is
 	Port ( 
-	debug : out STD_LOGIC_VECTOR (15 downto 0);
+	--debug : out STD_LOGIC_VECTOR (15 downto 0);
 	
 	clk : in STD_LOGIC;
 	rst : in STD_LOGIC;
@@ -99,7 +99,7 @@ architecture Behavioral of CPU is
 	
 	component RegFile
 		Port ( 
-		debug : out STD_LOGIC_VECTOR (15 downto 0);
+		--debug : out STD_LOGIC_VECTOR (15 downto 0);
 		clk : in  STD_LOGIC;
 		rst : in  STD_LOGIC;
 		Reg1Addr : in  STD_LOGIC_VECTOR (3 downto 0);
@@ -349,7 +349,7 @@ begin
 	
 	pc_imm_adder : Adder port map(rst=>rst, oper_1=>id_pc, oper_2=>id_imm, output=>pc_imm);
 	
-	id_regfile : RegFile port map(debug=>debug, clk=>clk, rst=>rst, Reg1Addr=>id_reg1addr, Reg2Addr=>id_reg2addr,
+	id_regfile : RegFile port map(clk=>clk, rst=>rst, Reg1Addr=>id_reg1addr, Reg2Addr=>id_reg2addr,
 											RegWrite=>wb_regW, WriteAddr=>wb_addr, WriteData=>wb_data, PCin=>id_pc,
 											Reg1Data=>id_reg1, Reg2Data=>id_reg2);
 											

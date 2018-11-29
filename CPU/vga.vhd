@@ -12,12 +12,12 @@ entity vga is
     -- gpu position
     gpu_pos : out std_logic_vector(11 downto 0);
     -- data from gpu according to gpu 
-    gpu_data : in std_logic_vector(7 downto 0);
+    gpu_data : in std_logic_vector(15 downto 0);
     
     -- data from ram2
-    ram_data : in std_logic_vector(11 downto 0);
+    ram_data : in std_logic_vector(15 downto 0);
     -- ram2 address
-    ram_addr : out std_logic_vector(15 downto 0);
+    ram_addr : out std_logic_vector(17 downto 0);
     
     -- synchro signal
     HS, VS : out std_logic;
@@ -82,23 +82,23 @@ begin
 
   -- calculate which block
   block_x <= H_count / 8;
-  block_y <= V_count / 12;
+  block_y <= V_count / 16;
   -- calclate pixel coordination
   pixel_x <= H_count - 8 * block_x;
-  pixel_y <= V_count - 12 * block_y;
+  pixel_y <= V_count - 16 * block_y;
   -- calculate next block
   next_block_x <= next_H_count / 8;
-  next_block_y <= next_V_count / 12;
+  next_block_y <= next_V_count / 16;
 
   -- next block
-  pos_in <= conv_std_logic_vector(next_block_x + 80 * next_block_y, 12);
+  gpu_pos <= conv_std_logic_vector(next_block_x + 80 * next_block_y, 12);
   -- block colour
   R_block <= conv_integer(current_block(15 downto 13));
   G_block <= conv_integer(current_block(12 downto 10));
   B_block <= conv_integer(current_block(9 downto 7));
 
   -- request ram_addr
-  ram_addr <= start_addr + conv_integer(data_in(7 downto 0)) * img_size + pixel_x + pixel_y * 8;
+  ram_addr <= start_addr + conv_integer(gpu_data(11 downto 0)) * img_size + pixel_x + pixel_y * 8;
 
   display: process(H_count, V_count, ram_data)
   begin
