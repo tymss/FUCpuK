@@ -1,11 +1,11 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <report-views version="2.0" >
  <header>
-  <DateModified>2018-11-26T17:35:08</DateModified>
-  <ModuleName>mem_test</ModuleName>
+  <DateModified>2018-11-29T14:12:43</DateModified>
+  <ModuleName>aPlusC</ModuleName>
   <SummaryTimeStamp>2018-11-26T17:33:07</SummaryTimeStamp>
   <SavedFilePath>C:/Users/HankyZ/Desktop/FUCpuK/FUCpuK/CPU/iseconfig/aPlusC.xreport</SavedFilePath>
-  <ImplementationReportsDirectory>C:/Users/HankyZ/Desktop/FUCpuK/FUCpuK/CPU</ImplementationReportsDirectory>
+  <ImplementationReportsDirectory>C:/Users/HankyZ/Desktop/FUCpuK/FUCpuK/CPU\</ImplementationReportsDirectory>
   <DateInitialized>2018-11-26T17:35:08</DateInitialized>
   <EnableMessageFiltering>false</EnableMessageFiltering>
  </header>

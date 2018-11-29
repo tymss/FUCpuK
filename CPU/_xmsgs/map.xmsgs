@@ -5,10 +5,88 @@
      behavior or data corruption.  It is strongly advised that
      users do not edit the contents of this file. -->
 <messages>
-<msg type="error" file="Map" num="116" delta="old" >The design is empty.  No processing will be done.
+<msg type="info" file="MapLib" num="562" delta="new" >No environment variables are currently set.
 </msg>
 
-<msg type="user_fatal" file="Map" num="52" delta="old" >Problem encountered processing RPMs.
+<msg type="warning" file="MapLib" num="701" delta="new" >Signal <arg fmt="%s" index="1">Ram2Data&lt;15&gt;</arg> connected to top level port <arg fmt="%s" index="2">Ram2Data&lt;15&gt;</arg> has been removed.
+</msg>
+
+<msg type="warning" file="MapLib" num="701" delta="new" >Signal <arg fmt="%s" index="1">Ram2Data&lt;14&gt;</arg> connected to top level port <arg fmt="%s" index="2">Ram2Data&lt;14&gt;</arg> has been removed.
+</msg>
+
+<msg type="warning" file="MapLib" num="701" delta="new" >Signal <arg fmt="%s" index="1">Ram2Data&lt;13&gt;</arg> connected to top level port <arg fmt="%s" index="2">Ram2Data&lt;13&gt;</arg> has been removed.
+</msg>
+
+<msg type="warning" file="MapLib" num="701" delta="new" >Signal <arg fmt="%s" index="1">Ram2Data&lt;12&gt;</arg> connected to top level port <arg fmt="%s" index="2">Ram2Data&lt;12&gt;</arg> has been removed.
+</msg>
+
+<msg type="warning" file="MapLib" num="701" delta="new" >Signal <arg fmt="%s" index="1">Ram2Data&lt;11&gt;</arg> connected to top level port <arg fmt="%s" index="2">Ram2Data&lt;11&gt;</arg> has been removed.
+</msg>
+
+<msg type="warning" file="MapLib" num="701" delta="new" >Signal <arg fmt="%s" index="1">Ram2Data&lt;10&gt;</arg> connected to top level port <arg fmt="%s" index="2">Ram2Data&lt;10&gt;</arg> has been removed.
+</msg>
+
+<msg type="warning" file="MapLib" num="701" delta="new" >Signal <arg fmt="%s" index="1">Ram2Data&lt;9&gt;</arg> connected to top level port <arg fmt="%s" index="2">Ram2Data&lt;9&gt;</arg> has been removed.
+</msg>
+
+<msg type="warning" file="MapLib" num="701" delta="new" >Signal <arg fmt="%s" index="1">Ram2Data&lt;8&gt;</arg> connected to top level port <arg fmt="%s" index="2">Ram2Data&lt;8&gt;</arg> has been removed.
+</msg>
+
+<msg type="warning" file="MapLib" num="701" delta="new" >Signal <arg fmt="%s" index="1">Ram2Data&lt;7&gt;</arg> connected to top level port <arg fmt="%s" index="2">Ram2Data&lt;7&gt;</arg> has been removed.
+</msg>
+
+<msg type="warning" file="MapLib" num="701" delta="new" >Signal <arg fmt="%s" index="1">Ram2Data&lt;6&gt;</arg> connected to top level port <arg fmt="%s" index="2">Ram2Data&lt;6&gt;</arg> has been removed.
+</msg>
+
+<msg type="warning" file="MapLib" num="701" delta="new" >Signal <arg fmt="%s" index="1">Ram2Data&lt;5&gt;</arg> connected to top level port <arg fmt="%s" index="2">Ram2Data&lt;5&gt;</arg> has been removed.
+</msg>
+
+<msg type="warning" file="MapLib" num="701" delta="new" >Signal <arg fmt="%s" index="1">Ram2Data&lt;4&gt;</arg> connected to top level port <arg fmt="%s" index="2">Ram2Data&lt;4&gt;</arg> has been removed.
+</msg>
+
+<msg type="warning" file="MapLib" num="701" delta="new" >Signal <arg fmt="%s" index="1">Ram2Data&lt;3&gt;</arg> connected to top level port <arg fmt="%s" index="2">Ram2Data&lt;3&gt;</arg> has been removed.
+</msg>
+
+<msg type="warning" file="MapLib" num="701" delta="new" >Signal <arg fmt="%s" index="1">Ram2Data&lt;2&gt;</arg> connected to top level port <arg fmt="%s" index="2">Ram2Data&lt;2&gt;</arg> has been removed.
+</msg>
+
+<msg type="warning" file="MapLib" num="701" delta="new" >Signal <arg fmt="%s" index="1">Ram2Data&lt;1&gt;</arg> connected to top level port <arg fmt="%s" index="2">Ram2Data&lt;1&gt;</arg> has been removed.
+</msg>
+
+<msg type="warning" file="MapLib" num="701" delta="new" >Signal <arg fmt="%s" index="1">Ram2Data&lt;0&gt;</arg> connected to top level port <arg fmt="%s" index="2">Ram2Data&lt;0&gt;</arg> has been removed.
+</msg>
+
+<msg type="info" file="LIT" num="244" delta="new" >All of the single ended outputs in this design are using slew rate limited output drivers. The delay on speed critical single ended outputs can be dramatically reduced by designating them as fast outputs.
+</msg>
+
+<msg type="warning" file="PhysDesignRules" num="372" delta="new" >Gated clock. Clock net <arg fmt="%s" index="1">my_cpu/exe_alu/ALUout_not0001</arg> is sourced by a combinatorial pin. This is not good design practice. Use the CE pin to control the loading of data into the flip-flop.
+</msg>
+
+<msg type="warning" file="PhysDesignRules" num="372" delta="new" >Gated clock. Clock net <arg fmt="%s" index="1">my_cpu/id_decoder/imm3_cmp_eq0000</arg> is sourced by a combinatorial pin. This is not good design practice. Use the CE pin to control the loading of data into the flip-flop.
+</msg>
+
+<msg type="warning" file="PhysDesignRules" num="372" delta="new" >Gated clock. Clock net <arg fmt="%s" index="1">my_cpu/id_decoder/aluOp_not0001</arg> is sourced by a combinatorial pin. This is not good design practice. Use the CE pin to control the loading of data into the flip-flop.
+</msg>
+
+<msg type="warning" file="PhysDesignRules" num="372" delta="new" >Gated clock. Clock net <arg fmt="%s" index="1">my_cpu/exe_alu/ALUflag_not0001</arg> is sourced by a combinatorial pin. This is not good design practice. Use the CE pin to control the loading of data into the flip-flop.
+</msg>
+
+<msg type="warning" file="PhysDesignRules" num="372" delta="new" >Gated clock. Clock net <arg fmt="%s" index="1">my_cpu/id_decoder/imm4_cmp_eq0000</arg> is sourced by a combinatorial pin. This is not good design practice. Use the CE pin to control the loading of data into the flip-flop.
+</msg>
+
+<msg type="warning" file="PhysDesignRules" num="372" delta="new" >Gated clock. Clock net <arg fmt="%s" index="1">my_cpu/hazard_controller/flush_or0000</arg> is sourced by a combinatorial pin. This is not good design practice. Use the CE pin to control the loading of data into the flip-flop.
+</msg>
+
+<msg type="warning" file="PhysDesignRules" num="372" delta="new" >Gated clock. Clock net <arg fmt="%s" index="1">my_cpu/id_decoder/imm_extOp_not0001</arg> is sourced by a combinatorial pin. This is not good design practice. Use the CE pin to control the loading of data into the flip-flop.
+</msg>
+
+<msg type="warning" file="PhysDesignRules" num="372" delta="new" >Gated clock. Clock net <arg fmt="%s" index="1">my_cpu/id_decoder/imm11_cmp_eq0000</arg> is sourced by a combinatorial pin. This is not good design practice. Use the CE pin to control the loading of data into the flip-flop.
+</msg>
+
+<msg type="warning" file="PhysDesignRules" num="372" delta="new" >Gated clock. Clock net <arg fmt="%s" index="1">my_cpu/id_decoder/imm8_not0001</arg> is sourced by a combinatorial pin. This is not good design practice. Use the CE pin to control the loading of data into the flip-flop.
+</msg>
+
+<msg type="warning" file="PhysDesignRules" num="372" delta="new" >Gated clock. Clock net <arg fmt="%s" index="1">my_cpu/id_decoder/imm5_not0001</arg> is sourced by a combinatorial pin. This is not good design practice. Use the CE pin to control the loading of data into the flip-flop.
 </msg>
 
 </messages>
