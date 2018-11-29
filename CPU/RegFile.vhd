@@ -31,7 +31,10 @@ use WORK.DEFINES.ALL;
 --use UNISIM.VComponents.all;
 
 entity RegFile is
-    Port ( clk : in  STD_LOGIC;
+    Port ( 
+			  debug : out STD_LOGIC_VECTOR (15 downto 0);		
+				
+			  clk : in  STD_LOGIC;
            rst : in  STD_LOGIC;
            Reg1Addr : in  STD_LOGIC_VECTOR (3 downto 0);
            Reg2Addr : in  STD_LOGIC_VECTOR (3 downto 0);
@@ -59,6 +62,8 @@ architecture Behavioral of RegFile is
 	
 begin
 
+	debug <= out3;
+	
 	r0 : Reg port map(WriteData, w_con(0), clk, rst, out0);
 	r1 : Reg port map(WriteData, w_con(1), clk, rst, out1);
 	r2 : Reg port map(WriteData, w_con(2), clk, rst, out2);

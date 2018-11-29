@@ -2,4 +2,6 @@ CPU/*
 !CPU/*.vhd
 !CPU/_xmsgs/
 !CPU/iseconfig/
-!CPU/aPlusC.xise
+!CPU/CPU.xise
+!CPU/aPlusC.ucf
+!CPU/ipcore_dir/
