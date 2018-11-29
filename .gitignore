@@ -5,3 +5,4 @@ CPU/*
 !CPU/CPU.xise
 !CPU/aPlusC.ucf
 !CPU/ipcore_dir/
+!CPU/ASM/
