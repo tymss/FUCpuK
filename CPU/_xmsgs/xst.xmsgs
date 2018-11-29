@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- IMPORTANT: This is an internal file that has been generated
+     by the Xilinx ISE software.  Any direct editing or
+     changes made to this file may result in unpredictable
+     behavior or data corruption.  It is strongly advised that
+     users do not edit the contents of this file. -->
+<messages>
+<msg type="error" file="HDLParsers" num="837" delta="new" >&quot;<arg fmt="%s" index="1">G:/workspace/FUCpuK/CPU/aPlusC.vhd</arg>&quot; Line <arg fmt="%d" index="2">210</arg>. Width mismatch. Expected width <arg fmt="%u" index="3">16</arg>, Actual width is <arg fmt="%u" index="4">12</arg> for dimension <arg fmt="%d" index="5">1</arg> of <arg fmt="%s" index="6">gpu_pos_s</arg>.
+</msg>
+
+</messages>
+

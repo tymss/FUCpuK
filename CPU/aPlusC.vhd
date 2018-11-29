@@ -19,6 +19,8 @@
 ----------------------------------------------------------------------------------
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
+use IEEE.STD_LOGIC_UNSIGNED.ALL;
+use IEEE.STD_LOGIC_ARITH.ALL;
 
 -- Uncomment the following library declaration if using
 -- arithmetic functions with Signed or Unsigned values
@@ -72,7 +74,7 @@ architecture Behavioral of aPlusC is
 	
 	component CPU
 		Port ( 
-		debug : out STD_LOGIC_VECTOR (15 downto 0);
+		--debug : out STD_LOGIC_VECTOR (15 downto 0);
 		
 		clk : in STD_LOGIC;
 		rst : in STD_LOGIC;
@@ -133,10 +135,16 @@ architecture Behavioral of aPlusC is
 		FlashRP : out STD_LOGIC;
 		FlashByte : out STD_LOGIC;
 		FlashVpen : out STD_LOGIC;
-		FlashAddr : out STD_LOGIC_VECTOR (22 downto 1)		
-		--TODO: FLASH PS2 VGA
-		
-		
+		FlashAddr : out STD_LOGIC_VECTOR (22 downto 1);		
+
+		--VGA
+		VGAAddr : in STD_LOGIC_VECTOR (17 downto 0);
+		VGAData : out STD_LOGIC_VECTOR (15 downto 0);
+		GPUPos : out STD_LOGIC_VECTOR (15 downto 0);
+		GPUData : out STD_LOGIC_VECTOR (15 downto 0);
+		GPUWrite : out STD_LOGIC
+
+		--TODO: PS2
 		--debug : out STD_LOGIC_VECTOR (15 downto 0)
 		);
 	end component;
@@ -162,10 +170,19 @@ architecture Behavioral of aPlusC is
 	signal memR : std_logic;
 	signal memW : std_logic;
 	
-	signal clk_2, clk_4, clk_8, clk_16 : std_logic;
+	signal clk_2 : std_logic;
 	signal my_clk : std_logic;
 	
 	signal fakerst : std_logic;
+	
+	signal vga_data : std_logic_vector (15 downto 0);
+	signal vga_addr : std_logic_vector (17 downto 0);
+	signal gpu_pos_pre : std_logic_vector (15 downto 0);
+	signal gpu_pos_s : std_logic_vector (11 downto 0);
+	signal gpu_data_s : std_logic_vector (15 downto 0);
+	signal gpu_write : std_logic;
+	signal gpu_we : std_logic;
+	
 	
 begin
 	
@@ -178,32 +195,16 @@ begin
 		end if;
 	end process;
 	
-	process(clk_2)
-	begin
-		if (rising_edge(clk_2)) then
-			clk_4 <= not clk_4;
-		end if;
-	end process;
-	
-	process(clk_4)
-	begin
-		if (rising_edge(clk_4)) then
-			clk_8 <= not clk_8;
-		end if;
-	end process;
-	
-	process(clk_8)
-	begin
-		if (rising_edge(clk_8)) then
-			clk_16 <= not clk_16;
-		end if;
-	end process;
-	
 	fakerst <= '0';
+		
+	gpu_we <= not gpu_write;	
 	
+	--GPUPos_convert
+	gpu_pos_s <= conv_std_logic_vector(conv_integer(gpu_pos_pre(15 downto 8)) * 80 + conv_integer(gpu_pos_pre(7 downto 0)), 12);
+
 	my_dcm : TimeMachine port map(CLKIN_IN=>clk, RST_IN=>fakerst, CLKFX_OUT=>my_clk);
 
-	my_cpu : CPU port map(debug=>LEDout, clk=>my_clk, rst=>rst, struct_ins_stall=>ins_stall, ins_in=>ins, ram_data_in=>ram_data_r,
+	my_cpu : CPU port map(clk=>my_clk, rst=>rst, struct_ins_stall=>ins_stall, ins_in=>ins, ram_data_in=>ram_data_r,
 								 ins_addr=>ins_addr, ram_addr_out=>ram_addr, ram_memR=>memR, ram_memW=>memW, ram_data_out=>ram_data_w);
 								 
 	my_memtop : MemTop port map(clk=>my_clk, rst=>rst, ins_addr=>ins_addr, ins_out=>ins, ins_stall=>ins_stall, memR=>memR,
@@ -212,8 +213,9 @@ begin
 										 Ram1EN=>Ram1EN, Ram1WE=>Ram1WE, Ram1OE=>Ram1OE, rdn=>rdn, wrn=>wrn, Ram2Addr=>Ram2Addr,
 										 Ram2Data=>Ram2Data, Ram2EN=>Ram2EN, Ram2WE=>Ram2WE, Ram2OE=>Ram2OE, FlashData=>FlashData,
 										 FlashWE=>FlashWE, FlashOE=>FlashOE, FlashCE=>FlashCE, FlashRP=>FlashRP, FlashByte=>FlashByte,
-										 FlashVpen=>FlashVpen, FlashAddr=>FlashAddr);
-											
+										 FlashVpen=>FlashVpen, FlashAddr=>FlashAddr, VGAAddr=>vga_addr, VGAData=>vga_data, GPUPos=>gpu_pos_s,
+										 GPUData=>gpu_data_pre, GPUWrite=>gpu_write);
+	
 	
 end Behavioral;
 
