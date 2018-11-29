@@ -34,7 +34,7 @@ architecture Behaviour of vga is
   -- initial address for image
   constant start_addr: std_logic_vector(17 downto 0) := "000000000000000000";
   -- block size
-  constant img_size: integer := 96;
+  constant img_size: integer := 128;
   
   -- counting block
   signal H_count, V_count : integer := 0;
