@@ -40,7 +40,7 @@ begin
       case state is
         when delay =>
           ASCII_OE <= '0';
-          if ASCII_OE = '1' then
+          if PS2_OE = '1' then
             case PS_DATA is
               -- arrow
               when x"e0" =>
@@ -101,7 +101,7 @@ begin
           end if;
           
         when break =>
-          if ASCII_OE = '1' then
+          if PS2_OE = '1' then
             if (PS2_DATA = PREVbuff) then
               PREVbuff <= (others => '0');
             end if;
