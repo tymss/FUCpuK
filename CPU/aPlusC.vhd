@@ -261,7 +261,7 @@ architecture Behavioral of aPlusC is
   
 begin
   
-  --LEDout <= ins_addr(12 downto 0) & data_ready & tbre & tsre;
+  LEDout <= ins_addr(12 downto 0) & data_ready & tbre & tsre;
   
   process(clk)
   begin
@@ -289,7 +289,7 @@ begin
                               Ram2Data=>Ram2Data, Ram2EN=>Ram2EN, Ram2WE=>Ram2WE, Ram2OE=>Ram2OE, FlashData=>FlashData,
                               FlashWE=>FlashWE, FlashOE=>FlashOE, FlashCE=>FlashCE, FlashRP=>FlashRP, FlashByte=>FlashByte,
                               FlashVpen=>FlashVpen, FlashAddr=>FlashAddr, VGAAddr=>vga_addr, VGAData=>vga_data, GPUPos=>gpu_pos_pre,
-                              GPUData=>gpu_data_s, GPUWrite=>gpu_write, PS2input=>ps2_out);
+                              GPUData=>gpu_data_s, GPUWrite=>gpu_write, ASCII_Input=>ASCII, ASCII_OE=>ASCII_OE);
   
   my_vga : VGA port map(clk=>my_clk, gpu_pos=>gpu_pos_l, gpu_data=>gpu_data_l, ram_data=>vga_data, ram_addr=>vga_addr,
                         HS=>VGAHS, VS=>VGAVS, R=>VGAR, G=>VGAG, B=>VGAB);

@@ -230,7 +230,7 @@ begin
 
   ASCII_Read : process(ASCII_Input, ASCII_OE)
   begin
-    if (ASCII_OE = Enable) then 
+    if (ASCII_OE = '1') then 
       ASCIIout <= ASCII_Input;
     end if;
   end process;
