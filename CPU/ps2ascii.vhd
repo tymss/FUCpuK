@@ -18,12 +18,12 @@ architecture behaviour of ps2ascii is
   type state_type is (delay, normal, arrow, break);
   signal CODEbuff, PREVbuff: std_logic_vector(7 downto 0);
   signal ASCIIbuff: std_logic_vector(15 downto 0);
-  signal shitfMode, capsMode, upperMode: std_logic;
+  signal shiftMode, capsMode, upperMode: std_logic;
   signal Lshift, Rshift: std_logic;
-
+  signal state: state_type;
 begin
   ASCII <= ASCIIBuff;
-  shitMode <= Lshift or Rshift;
+  shiftMode <= Lshift or Rshift;
   upperMode <= shiftMode xor capsMode;
   
   encode: process(RST, CLK, PS2_OE, PS2_DATA, CODEbuff)
@@ -41,7 +41,7 @@ begin
         when delay =>
           ASCII_OE <= '0';
           if PS2_OE = '1' then
-            case PS_DATA is
+            case PS2_DATA is
               -- arrow
               when x"e0" =>
                 state <= arrow;
@@ -51,7 +51,7 @@ begin
               -- normal
               when others =>
                 CODEbuff <= PS2_DATA;
-                state <= noraml;
+                state <= normal;
             end case;
           end if;
 

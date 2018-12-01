@@ -6,3 +6,6 @@ CPU/*
 !CPU/aPlusC.ucf
 !CPU/ipcore_dir/
 !CPU/ASM/
+CPU/ASM/.*
+CPU/ASM/VGA/.*
+CPU/ASM/PS2/.*
