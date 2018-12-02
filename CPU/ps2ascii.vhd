@@ -369,6 +369,11 @@ begin
           
         when break =>
           if PS2_OE = '1' then
+            if (PS2_DATA = x"12") then
+              Lshift <= '0';
+            elsif (PS_DATA = x"59") then
+              Rshift <= '0';
+            end if;
             if (PS2_DATA = PREVbuff) then
               PREVbuff <= (others => '0');
             end if;
