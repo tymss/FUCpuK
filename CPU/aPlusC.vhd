@@ -187,16 +187,16 @@ architecture Behavioral of aPlusC is
   end component;
 
   
-  COMPONENT TimeMachine
-    PORT(
-      CLKIN_IN : IN std_logic;
-      RST_IN : IN std_logic;          
-      CLKFX_OUT : OUT std_logic;
-      CLKIN_IBUFG_OUT : OUT std_logic;
-      CLK0_OUT : OUT std_logic;
-      LOCKED_OUT : OUT std_logic
-      );
-  END COMPONENT;
+  COMPONENT TM
+	PORT(
+		CLKIN_IN : IN std_logic;
+		RST_IN : IN std_logic;          
+		CLKFX_OUT : OUT std_logic;
+		CLKIN_IBUFG_OUT : OUT std_logic;
+		CLK0_OUT : OUT std_logic;
+		LOCKED_OUT : OUT std_logic
+		);
+	END COMPONENT;
   
   COMPONENT GPU
     PORT (
@@ -263,9 +263,10 @@ architecture Behavioral of aPlusC is
   
 begin
   
+  LEDout <= "0000000000000000";
   --LEDout <= ins_addr(12 downto 0) & data_ready & tbre & tsre;
   --LEDout <= gpu_we & gpu_pos_pre(6 downto 0) & gpu_pos_s(7 downto 0);
-  LEDout <= memW & ram_addr(3 downto 0) & gpu_pos_s(10 downto 0);
+  --LEDout <= memW & ram_addr(3 downto 0) & gpu_pos_s(10 downto 0);
   --my_clk <= clk;
   
   pos_stall : process(my_clk)
@@ -288,8 +289,9 @@ begin
   
   gpu_we(0) <= gpu_write;	
   
+  my_clk <= clk_2;
   
-  my_dcm : TimeMachine port map(CLKIN_IN=>clk, RST_IN=>fakerst, CLKFX_OUT=>my_clk);
+  --my_dcm : TM port map(CLKIN_IN=>clk, RST_IN=>fakerst, CLKFX_OUT=>my_clk);
 
   my_cpu : CPU port map(clk=>my_clk, rst=>rst, struct_ins_stall=>ins_stall, ins_in=>ins, ram_data_in=>ram_data_r,
                         ins_addr=>ins_addr, ram_addr_out=>ram_addr, ram_memR=>memR, ram_memW=>memW, ram_data_out=>ram_data_w);
