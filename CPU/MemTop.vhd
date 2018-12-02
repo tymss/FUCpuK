@@ -123,6 +123,8 @@ architecture Behavioral of MemTop is
   
   signal flash_ins_addr : std_logic_vector (15 downto 0);
   signal ASCIIout : std_logic_vector(15 downto 0);
+  
+  signal haveRead : std_logic;
 
   constant flash_ins_num : integer := 800;
   
@@ -228,10 +230,26 @@ begin
     end if;	
   end process;
 
-  ASCII_Read : process(ASCII_Input, ASCII_OE)
+  have_read_proc : process(clk, rst)
+  begin
+	if (rst = '0') then
+		haveRead <= '0';
+	elsif (rising_edge(clk)) then
+		if ((mem_addr = x"bf0e") and (memR = '1')) then
+			haveRead <= '1';
+		else
+			haveRead <= '0';
+		end if;
+	end if;
+  end process;
+
+
+  ASCII_Read : process(ASCII_Input, ASCII_OE, haveRead)
   begin
     if (ASCII_OE = '1') then 
       ASCIIout <= ASCII_Input;
+	 elsif (haveRead = '1') then
+		ASCIIout <= ZeroData;
     end if;
   end process;
   
