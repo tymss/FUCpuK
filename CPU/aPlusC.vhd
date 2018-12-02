@@ -185,25 +185,6 @@ architecture Behavioral of aPlusC is
       );
   end component;
 
-  component PS2
-    port(
-      FCLK, RST: in std_logic;
-      PS2_CLK, PS2_DATA: in std_logic;
-      SCANCODE: out std_logic_vector(7 downto 0);
-      OE: out std_logic
-);      
-    end component;
-
-  component ps2ascii
-    port(
-      CLK, RST: in std_logic;
-      PS2_DATA: in std_logic_vector(7 downto 0);
-      PS2_OE: in std_logic;
-      ASCII: out std_logic_vector(15 downto 0);
-      ASCII_OE: out std_logic
-);
-  end component;
-
   
   COMPONENT TimeMachine
     PORT(
@@ -227,6 +208,26 @@ architecture Behavioral of aPlusC is
       doutb : OUT STD_LOGIC_VECTOR(15 DOWNTO 0)
       );
   END COMPONENT;
+  
+  component PS2
+    port(
+      FCLK, RST: in std_logic;
+      PS2_CLK, PS2_DATA: in std_logic;
+      SCANCODE: out std_logic_vector(7 downto 0);
+      OE: out std_logic
+		);      
+  end component;
+
+  component ps2ascii
+    port(
+      CLK, RST: in std_logic;
+      PS2_DATA: in std_logic_vector(7 downto 0);
+      PS2_OE: in std_logic;
+      ASCII: out std_logic_vector(15 downto 0);
+      ASCII_OE: out std_logic
+		);
+  end component;
+
   
   signal ins_stall : std_logic;
   signal ins : std_logic_vector (15 downto 0);
@@ -261,7 +262,7 @@ architecture Behavioral of aPlusC is
   
 begin
   
-  --LEDout <= ins_addr(12 downto 0) & data_ready & tbre & tsre;
+  LEDout <= ins_addr(12 downto 0) & data_ready & tbre & tsre;
   
   process(clk)
   begin
@@ -289,14 +290,14 @@ begin
                               Ram2Data=>Ram2Data, Ram2EN=>Ram2EN, Ram2WE=>Ram2WE, Ram2OE=>Ram2OE, FlashData=>FlashData,
                               FlashWE=>FlashWE, FlashOE=>FlashOE, FlashCE=>FlashCE, FlashRP=>FlashRP, FlashByte=>FlashByte,
                               FlashVpen=>FlashVpen, FlashAddr=>FlashAddr, VGAAddr=>vga_addr, VGAData=>vga_data, GPUPos=>gpu_pos_pre,
-                              GPUData=>gpu_data_s, GPUWrite=>gpu_write, PS2input=>ps2_out);
+                              GPUData=>gpu_data_s, GPUWrite=>gpu_write, ASCII_Input=>ASCII, ASCII_OE=>ASCII_OE);
   
   my_vga : VGA port map(clk=>my_clk, gpu_pos=>gpu_pos_l, gpu_data=>gpu_data_l, ram_data=>vga_data, ram_addr=>vga_addr,
                         HS=>VGAHS, VS=>VGAVS, R=>VGAR, G=>VGAG, B=>VGAB);
   
   my_gpu : GPU port map(clka=>my_clk, wea=>gpu_we, addra=>gpu_pos_s, dina=>gpu_data_s, clkb=>my_clk, addrb=>gpu_pos_l, doutb=>gpu_data_l);							 
 
-  my_ps2 : PS2 port map(FCLK=>my_clk, RST=>rst, PS2_CLK=>PS2_CLK, PS2_DATA=>PS2_DATA);
+  my_ps2 : PS2 port map(FCLK=>my_clk, RST=>rst, PS2_CLK=>PS2_CLK, PS2_DATA=>PS2_DATA, SCANCODE=>PS2DATA, OE=>PS2OE);
 
   my_ps2ascii : ps2ascii port map(CLK=>my_clk, RST=>rst, PS2_DATA=>PS2DATA, PS2_OE=>PS2OE, ASCII=>ASCII, ASCII_OE=>ASCII_OE);
 end Behavioral;

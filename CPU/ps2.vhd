@@ -106,7 +106,7 @@ begin
 
         when checksum =>
           if clk = '1' then
-            if (odd xor data) = '1' then
+            if (odd_num xor data) = '1' then
               state <= last;
             else
               state <= delay;
