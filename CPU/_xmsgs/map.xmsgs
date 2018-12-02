@@ -28,13 +28,25 @@ To see the details of these <arg fmt="%s" index="4">info</arg> messages, please 
 Pin I3 of my_memtop/Ram1WE10</arg>
 </msg>
 
-<msg type="warning" file="Pack" num="266" delta="old" >The function generator <arg fmt="%s" index="1">my_cpu/exe_alu/ALUout_shift0003&lt;15&gt;1</arg> failed to merge with F5 multiplexer <arg fmt="%s" index="2">my_cpu/exe_alu/ALUout_mux0001&lt;14&gt;172_SW0_f5</arg>.  <arg fmt="%z" index="3">There is a conflict for the FXMUX.</arg>  The design will exhibit suboptimal timing.
+<msg type="warning" file="Pack" num="266" delta="new" >The function generator <arg fmt="%s" index="1">my_cpu/exe_alu/ALUout_shift0003&lt;15&gt;1</arg> failed to merge with F5 multiplexer <arg fmt="%s" index="2">my_cpu/exe_alu/ALUout_mux0001&lt;13&gt;167_SW0_f5</arg>.  <arg fmt="%z" index="3">There is a conflict for the FXMUX.</arg>  The design will exhibit suboptimal timing.
+</msg>
+
+<msg type="warning" file="Pack" num="266" delta="new" >The function generator <arg fmt="%s" index="1">my_cpu/exe_alu/ALUout_shift0003&lt;15&gt;1</arg> failed to merge with F5 multiplexer <arg fmt="%s" index="2">my_cpu/exe_alu/ALUout_mux0001&lt;14&gt;172_SW0_f5</arg>.  <arg fmt="%z" index="3">There is a conflict for the FXMUX.</arg>  The design will exhibit suboptimal timing.
+</msg>
+
+<msg type="warning" file="Pack" num="266" delta="new" >The function generator <arg fmt="%s" index="1">my_cpu/exe_alu/ALUout_shift0003&lt;15&gt;1</arg> failed to merge with F5 multiplexer <arg fmt="%s" index="2">my_cpu/exe_alu/ALUout_mux0001&lt;11&gt;82_SW0_f5</arg>.  <arg fmt="%z" index="3">There is a conflict for the FXMUX.</arg>  The design will exhibit suboptimal timing.
+</msg>
+
+<msg type="warning" file="Pack" num="266" delta="new" >The function generator <arg fmt="%s" index="1">my_cpu/exe_alu/ALUout_shift0003&lt;15&gt;1</arg> failed to merge with F5 multiplexer <arg fmt="%s" index="2">my_cpu/exe_alu/ALUout_mux0001&lt;12&gt;167_SW0_f5</arg>.  <arg fmt="%z" index="3">There is a conflict for the FXMUX.</arg>  The design will exhibit suboptimal timing.
+</msg>
+
+<msg type="warning" file="PhysDesignRules" num="372" delta="old" >Gated clock. Clock net <arg fmt="%s" index="1">my_cpu/id_decoder/imm11_cmp_eq0000</arg> is sourced by a combinatorial pin. This is not good design practice. Use the CE pin to control the loading of data into the flip-flop.
 </msg>
 
 <msg type="warning" file="PhysDesignRules" num="372" delta="old" >Gated clock. Clock net <arg fmt="%s" index="1">my_cpu/exe_alu/ALUout_not0001</arg> is sourced by a combinatorial pin. This is not good design practice. Use the CE pin to control the loading of data into the flip-flop.
 </msg>
 
-<msg type="warning" file="PhysDesignRules" num="372" delta="old" >Gated clock. Clock net <arg fmt="%s" index="1">my_cpu/id_decoder/imm11_cmp_eq0000</arg> is sourced by a combinatorial pin. This is not good design practice. Use the CE pin to control the loading of data into the flip-flop.
+<msg type="warning" file="PhysDesignRules" num="372" delta="old" >Gated clock. Clock net <arg fmt="%s" index="1">LEDout_15_OBUF</arg> is sourced by a combinatorial pin. This is not good design practice. Use the CE pin to control the loading of data into the flip-flop.
 </msg>
 
 <msg type="warning" file="PhysDesignRules" num="372" delta="old" >Gated clock. Clock net <arg fmt="%s" index="1">my_cpu/id_decoder/imm8_not0001</arg> is sourced by a combinatorial pin. This is not good design practice. Use the CE pin to control the loading of data into the flip-flop.
@@ -53,9 +65,6 @@ Pin I3 of my_memtop/Ram1WE10</arg>
 </msg>
 
 <msg type="warning" file="PhysDesignRules" num="372" delta="old" >Gated clock. Clock net <arg fmt="%s" index="1">my_cpu/id_decoder/imm3_cmp_eq0000</arg> is sourced by a combinatorial pin. This is not good design practice. Use the CE pin to control the loading of data into the flip-flop.
-</msg>
-
-<msg type="warning" file="PhysDesignRules" num="372" delta="old" >Gated clock. Clock net <arg fmt="%s" index="1">memW</arg> is sourced by a combinatorial pin. This is not good design practice. Use the CE pin to control the loading of data into the flip-flop.
 </msg>
 
 <msg type="warning" file="PhysDesignRules" num="372" delta="old" >Gated clock. Clock net <arg fmt="%s" index="1">my_cpu/id_decoder/imm_extOp_not0001</arg> is sourced by a combinatorial pin. This is not good design practice. Use the CE pin to control the loading of data into the flip-flop.
@@ -85,7 +94,7 @@ Pin I3 of my_memtop/Ram1WE10</arg>
 <msg type="warning" file="PhysDesignRules" num="367" delta="old" >The signal &lt;<arg fmt="%s" index="1">Ram2Data&lt;9&gt;_IBUF</arg>&gt; is incomplete. The signal does not drive any load pins in the design.
 </msg>
 
-<msg type="info" file="PhysDesignRules" num="772" delta="old" >To achieve optimal frequency synthesis performance with the CLKFX and CLKFX180 outputs of the DCM comp <arg fmt="%s" index="1">my_dcm/DCM_SP_INST</arg>, consult the device Interactive Data Sheet.
+<msg type="info" file="PhysDesignRules" num="772" delta="new" >To achieve optimal frequency synthesis performance with the CLKFX and CLKFX180 outputs of the DCM comp <arg fmt="%s" index="1">my_dcm/DCM_SP_INST</arg>, consult the device Interactive Data Sheet.
 </msg>
 
 </messages>
