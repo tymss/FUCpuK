@@ -88,241 +88,276 @@ begin
                 state <= delay;
 
               when x"23" => 								
-                if (upperModifier = '1') then
-                  ASCIIBuffer <= x"0044"; -- D
+                if (upperMode = '1') then
+                  ASCIIBuff <= x"0044"; -- D
                 else
-                  ASCIIBuffer <= x"0064"; -- d
+                  ASCIIBuff <= x"0064"; -- d
                 end if;
                 state <= delay;	
               when x"24" => 
-                if (upperModifier = '1') then
-                  ASCIIBuffer <= x"0045"; -- E
+                if (upperMode = '1') then
+                  ASCIIBuff <= x"0045"; -- E
                 else
-                  ASCIIBuffer <= x"0065"; -- e
+                  ASCIIBuff <= x"0065"; -- e
                 end if;
                 state <= delay;	
               when x"2b" => 								
-                if (upperModifier = '1') then
-                  ASCIIBuffer <= x"0046"; -- F
+                if (upperMode = '1') then
+                  ASCIIBuff <= x"0046"; -- F
                 else
-                  ASCIIBuffer <= x"0066"; -- f
+                  ASCIIBuff <= x"0066"; -- f
                 end if;
                 state <= delay;		
               when x"34" => 
-                if (upperModifier = '1') then
-                  ASCIIBuffer <= x"0047"; -- G
+                if (upperMode = '1') then
+                  ASCIIBuff <= x"0047"; -- G
                 else
-                  ASCIIBuffer <= x"0067"; -- g
+                  ASCIIBuff <= x"0067"; -- g
                 end if;
                 state <= delay;	
               when x"33" => 
-                if (upperModifier = '1') then
-                  ASCIIBuffer <= x"0048"; -- H
+                if (upperMode = '1') then
+                  ASCIIBuff <= x"0048"; -- H
                 else
-                  ASCIIBuffer <= x"0068"; -- h
+                  ASCIIBuff <= x"0068"; -- h
                 end if;
                 state <= delay;	
               when x"43" =>
-                if (upperModifier = '1') then
-                  ASCIIBuffer <= x"0049"; -- I
+                if (upperMode = '1') then
+                  ASCIIBuff <= x"0049"; -- I
                 else
-                  ASCIIBuffer <= x"0069"; -- i
+                  ASCIIBuff <= x"0069"; -- i
                 end if;
                 state <= delay;	
               when x"3b" => 
-                if (upperModifier = '1') then
-                  ASCIIBuffer <= x"004a"; -- J
+                if (upperMode = '1') then
+                  ASCIIBuff <= x"004a"; -- J
                 else
-                  ASCIIBuffer <= x"006a"; -- j
+                  ASCIIBuff <= x"006a"; -- j
                 end if;
                 state <= delay;	
               when x"42" => 
-                if (upperModifier = '1') then
-                  ASCIIBuffer <= x"004b"; -- K
+                if (upperMode = '1') then
+                  ASCIIBuff <= x"004b"; -- K
                 else
-                  ASCIIBuffer <= x"006b"; -- k
+                  ASCIIBuff <= x"006b"; -- k
                 end if;
                 state <= delay;		
               when x"4b" => 
-                if (upperModifier = '1') then
-                  ASCIIBuffer <= x"004c"; -- L
+                if (upperMode = '1') then
+                  ASCIIBuff <= x"004c"; -- L
                 else
-                  ASCIIBuffer <= x"006c"; -- l
+                  ASCIIBuff <= x"006c"; -- l
                 end if;
                 state <= delay;	
               when x"3a" => 
-                if (upperModifier = '1') then
-                  ASCIIBuffer <= x"004d"; -- M
+                if (upperMode = '1') then
+                  ASCIIBuff <= x"004d"; -- M
                 else
-                  ASCIIBuffer <= x"006d"; -- m
+                  ASCIIBuff <= x"006d"; -- m
                 end if;
                 state <= delay;	
               when x"31" => 
-                if (upperModifier = '1') then
-                  ASCIIBuffer <= x"004e"; -- N
+                if (upperMode = '1') then
+                  ASCIIBuff <= x"004e"; -- N
                 else
-                  ASCIIBuffer <= x"006e"; -- n
+                  ASCIIBuff <= x"006e"; -- n
                 end if;
                 state <= delay;	
               when x"44" => 
-                if (upperModifier = '1') then
-                  ASCIIBuffer <= x"004f"; -- O
+                if (upperMode = '1') then
+                  ASCIIBuff <= x"004f"; -- O
                 else
-                  ASCIIBuffer <= x"006f"; -- o
+                  ASCIIBuff <= x"006f"; -- o
                 end if;
                 state <= delay;	
               when x"4d" => 
-                if (upperModifier = '1') then
-                  ASCIIBuffer <= x"0050"; -- P
+                if (upperMode = '1') then
+                  ASCIIBuff <= x"0050"; -- P
                 else
-                  ASCIIBuffer <= x"0070"; -- p
+                  ASCIIBuff <= x"0070"; -- p
                 end if;
                 state <= delay;			
               when x"15" => 
-                if (upperModifier = '1') then
-                  ASCIIBuffer <= x"0051"; -- Q
+                if (upperMode = '1') then
+                  ASCIIBuff <= x"0051"; -- Q
                 else
-                  ASCIIBuffer <= x"0071"; -- q
+                  ASCIIBuff <= x"0071"; -- q
                 end if;
                 state <= delay;				
               when x"2d" => 
-                if (upperModifier = '1') then
-                  ASCIIBuffer <= x"0052"; -- R
+                if (upperMode = '1') then
+                  ASCIIBuff <= x"0052"; -- R
                 else
-                  ASCIIBuffer <= x"0072"; -- r
+                  ASCIIBuff <= x"0072"; -- r
                 end if;
                 state <= delay;		
               when x"1b" => 
-                if (upperModifier = '1') then
-                  ASCIIBuffer <= x"0053"; -- S
+                if (upperMode = '1') then
+                  ASCIIBuff <= x"0053"; -- S
                 else
-                  ASCIIBuffer <= x"0073"; -- s
+                  ASCIIBuff <= x"0073"; -- s
                 end if;
                 state <= delay;		
               when x"2c" => 
-                if (upperModifier = '1') then
-                  ASCIIBuffer <= x"0054"; -- T
+                if (upperMode = '1') then
+                  ASCIIBuff <= x"0054"; -- T
                 else
-                  ASCIIBuffer <= x"0074"; -- t
+                  ASCIIBuff <= x"0074"; -- t
                 end if;
                 state <= delay;	
               when x"3c" => 
-                if (upperModifier = '1') then
-                  ASCIIBuffer <= x"0055"; -- U
+                if (upperMode = '1') then
+                  ASCIIBuff <= x"0055"; -- U
                 else
-                  ASCIIBuffer <= x"0075"; -- u
+                  ASCIIBuff <= x"0075"; -- u
                 end if;
                 state <= delay;						
               when x"2a" => 
-                if (upperModifier = '1') then
-                  ASCIIBuffer <= x"0056"; -- V
+                if (upperMode = '1') then
+                  ASCIIBuff <= x"0056"; -- V
                 else
-                  ASCIIBuffer <= x"0076"; -- v
+                  ASCIIBuff <= x"0076"; -- v
                 end if;
                 state <= delay;	
               when x"1d" => 
-                if (upperModifier = '1') then
-                  ASCIIBuffer <= x"0057"; -- W
+                if (upperMode = '1') then
+                  ASCIIBuff <= x"0057"; -- W
                 else
-                  ASCIIBuffer <= x"0077"; -- w
+                  ASCIIBuff <= x"0077"; -- w
                 end if;
                 state <= delay;		
               when x"22" => 
-                if (upperModifier = '1') then
-                  ASCIIBuffer <= x"0058"; -- X
+                if (upperMode = '1') then
+                  ASCIIBuff <= x"0058"; -- X
                 else
-                  ASCIIBuffer <= x"0078"; -- x
+                  ASCIIBuff <= x"0078"; -- x
                 end if;
                 state <= delay;	
               when x"35" => 
-                if (upperModifier = '1') then
-                  ASCIIBuffer <= x"0059"; -- Y
+                if (upperMode = '1') then
+                  ASCIIBuff <= x"0059"; -- Y
                 else
-                  ASCIIBuffer <= x"0079"; -- y
+                  ASCIIBuff <= x"0079"; -- y
                 end if;
                 state <= delay;									
               when x"1a" => 								
-                if (upperModifier = '1') then
-                  ASCIIBuffer <= x"005a"; -- Z
+                if (upperMode = '1') then
+                  ASCIIBuff <= x"005a"; -- Z
                 else
-                  ASCIIBuffer <= x"007a"; -- z
+                  ASCIIBuff <= x"007a"; -- z
                 end if;
                 state <= delay;	
               -- 0-9		
               when x"16" => 
-                if (shiftModifier = '1') then
-                  ASCIIBuffer <= x"0021"; -- !
+                if (shiftMode = '1') then
+                  ASCIIBuff <= x"0021"; -- !
                 else
-                  ASCIIBuffer <= x"0031"; -- 1
+                  ASCIIBuff <= x"0031"; -- 1
                 end if;
                 state <= delay;		
               when x"1e" => 
-                if (shiftModifier = '1') then
-                  ASCIIBuffer <= x"0040"; -- @
+                if (shiftMode = '1') then
+                  ASCIIBuff <= x"0040"; -- @
                 else
-                  ASCIIBuffer <= x"0032"; -- 2
+                  ASCIIBuff <= x"0032"; -- 2
                 end if;
                 state <= delay;		
               when x"26" => 
-                if (shiftModifier = '1') then
-                  ASCIIBuffer <= x"0023"; -- #
+                if (shiftMode = '1') then
+                  ASCIIBuff <= x"0023"; -- #
                 else
-                  ASCIIBuffer <= x"0033"; -- 3
+                  ASCIIBuff <= x"0033"; -- 3
                 end if;
                 state <= delay;		
               when x"25" => 
-                if (shiftModifier = '1') then
-                  ASCIIBuffer <= x"0024"; -- $
+                if (shiftMode = '1') then
+                  ASCIIBuff <= x"0024"; -- $
                 else
-                  ASCIIBuffer <= x"0034"; -- 4
+                  ASCIIBuff <= x"0034"; -- 4
                 end if;
                 state <= delay;		
               when x"2e" => 
-                if (shiftModifier = '1') then
-                  ASCIIBuffer <= x"0025"; -- %
+                if (shiftMode = '1') then
+                  ASCIIBuff <= x"0025"; -- %
                 else
-                  ASCIIBuffer <= x"0035"; -- 5
+                  ASCIIBuff <= x"0035"; -- 5
                 end if;
                 state <= delay;		
               when x"36" => 
-                if (shiftModifier = '1') then
-                  ASCIIBuffer <= x"005e"; -- ^
+                if (shiftMode = '1') then
+                  ASCIIBuff <= x"005e"; -- ^
                 else
-                  ASCIIBuffer <= x"0036"; -- 6
+                  ASCIIBuff <= x"0036"; -- 6
                 end if;
                 state <= delay;		
               when x"3d" => 
-                if (shiftModifier = '1') then
-                  ASCIIBuffer <= x"0026"; -- &
+                if (shiftMode = '1') then
+                  ASCIIBuff <= x"0026"; -- &
                 else
-                  ASCIIBuffer <= x"0037"; -- 7
+                  ASCIIBuff <= x"0037"; -- 7
                 end if;
                 state <= delay;		
               when x"3e" => 
-                if (shiftModifier = '1') then
-                  ASCIIBuffer <= x"002a"; -- *
+                if (shiftMode = '1') then
+                  ASCIIBuff <= x"002a"; -- *
                 else
-                  ASCIIBuffer <= x"0038"; -- 8
+                  ASCIIBuff <= x"0038"; -- 8
                 end if;
                 state <= delay;		
               when x"46" => 
-                if (shiftModifier = '1') then
-                  ASCIIBuffer <= x"0028"; -- (
+                if (shiftMode = '1') then
+                  ASCIIBuff <= x"0028"; -- (
                 else
-                  ASCIIBuffer <= x"0039"; -- 9
+                  Asciibuff <= x"0039"; -- 9
                 end if;
                 state <= delay;
               when x"45" => 
-                if (shiftModifier = '1') then
-                  ASCIIBuffer <= x"0029"; -- )
+                if (shiftMode = '1') then
+                  ASCIIBuff <= x"0029"; -- )
                 else
-                  ASCIIBuffer <= x"0030"; -- 0
+                  ASCIIBuff <= x"0030"; -- 0
                 end if;
+                state <= delay;
+             -- mode
+              when x"12" => 
+                Lshift <= '1'; -- LShift
+                state <= delay;	
+              when x"59" => 
+                Rshift <= '1'; -- Rshift
+                state <= delay;		
+              when x"58" => 
+                capsMode <= not(capsMode); -- caps lock
+                state <= delay;	
+              -- control
+              when x"75" =>
+                ASCIIBuff <= x"0011"; -- Up
+                state <= delay;
+              when x"72" =>
+                ASCIIBuff <= x"0012"; -- Down
+                state <= delay;
+              when x"6B" =>
+                ASCIIBuff <= x"0013"; -- Left
+                state <= delay;
+              when x"74" =>
+                ASCIIBuff <= x"0014"; -- Right
+                state <= delay;
+              when x"5a" =>
+                ASCIIBuff <= x"000a"; -- enter
+                state <= delay;
+              when x"66" =>
+                ASCIIBuff <= x"0008"; -- back space
+                state <= delay;
+              when x"29" =>
+                ASCIIBuff <= x"0020"; -- space
+                state <= delay;
+              when x"76" =>
+                ASCIIBuff <= x"001b"; -- esc
                 state <= delay;
               when others =>
                 ASCIIBuff <= x"0000";
                 state <= delay;
-
+                
             end case;
             ASCII_OE <= '1';
 
