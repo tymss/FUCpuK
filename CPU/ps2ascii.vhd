@@ -37,7 +37,7 @@ begin
       ASCIIBuff <= x"0000";
       state <= delay;
     elsif rising_edge(CLK) then
-       case state is
+      case state is
         when delay =>
           ASCII_OE <= '0';
           if PS2_OE = '1' then
@@ -338,6 +338,84 @@ begin
                   ASCIIBuff <= x"0030"; -- 0
                 end if;
                 state <= delay;
+              -- special
+              when x"0e" => 
+                if (shiftMode = '1') then
+                  ASCIIBuff <= x"007e";
+                else
+                  ASCIIBuff <= x"0060";
+                end if;
+                state <= delay;									
+              when x"4e" => 
+                if (shiftMode = '1') then
+                  ASCIIBuff <= x"005f";
+                else
+                  ASCIIBuff <= x"002d";
+                end if;
+                state <= delay;									
+              when x"55" => 
+                if (shiftMode = '1') then
+                  ASCIIBuff <= x"002b";
+                else
+                  ASCIIBuff <= x"003d";
+                end if;
+                state <= delay;									
+              when x"54" => 
+                if (shiftMode = '1') then
+                  ASCIIBuff <= x"007b";
+                else
+                  ASCIIBuff <= x"005b";
+                end if;
+                state <= delay;									
+              when x"5b" => 
+                if (shiftMode = '1') then
+                  ASCIIBuff <= x"007d";
+                else
+                  ASCIIBuff <= x"005d";
+                end if;
+                state <= delay;
+              when x"5d" => 
+                if (shiftMode = '1') then
+                  ASCIIBuff <= x"007c";
+                else
+                  ASCIIBuff <= x"005c";
+                end if;
+                state <= delay;									
+              when x"4c" => 
+                if (shiftMode = '1') then
+                  ASCIIBuff <= x"003a";
+                else
+                  ASCIIBuff <= x"003b";
+                end if;
+                state <= delay;									
+              when x"52" => 
+                if (shiftMode = '1') then
+                  ASCIIBuff <= x"0022";
+                else
+                  ASCIIBuff <= x"0027";
+                end if;
+                state <= delay;									
+              when x"41" => 
+                if (shiftMode = '1') then
+                  ASCIIBuff <= x"003c";
+                else
+                  ASCIIBuff <= x"002c";
+                end if;
+                state <= delay;									
+              when x"49" => 
+                if (shiftMode = '1') then
+                  ASCIIBuff <= x"003e";
+                else
+                  ASCIIBuff <= x"002e";
+                end if;
+                state <= delay;
+              when x"4a" => 
+                if (shiftMode = '1') then
+                  ASCIIBuff <= x"003f";
+                else
+                  ASCIIBuff <= x"002f";
+                end if;
+                state <= delay;		
               -- mode
               when x"12" => 
                 Lshift <= '1'; -- LShift
