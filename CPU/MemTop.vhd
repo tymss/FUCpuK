@@ -33,7 +33,10 @@ use WORK.DEFINES.ALL;
 --use UNISIM.VComponents.all;
 
 entity MemTop is
-  Port ( clk : in STD_LOGIC;
+  Port ( 
+  
+  
+			clk : in STD_LOGIC;
          rst : in STD_LOGIC;
          
          --if¶Î
@@ -125,14 +128,15 @@ architecture Behavioral of MemTop is
   signal ASCIIout : std_logic_vector(15 downto 0);
   
   signal haveRead : std_logic;
-
+  
+  
   constant flash_ins_num : integer := 800;
   
 begin
 
   --DEBUG
-  --debug <= flash_out;
   --finishLoad <= '1';
+
 
   --flashÊ±ÖÓ·ÖÆµ
   process(clk)
@@ -232,15 +236,15 @@ begin
 
   have_read_proc : process(clk, rst)
   begin
-	if (rst = '0') then
-		haveRead <= '0';
-	elsif (rising_edge(clk)) then
-		if ((mem_addr = x"bf0e") and (memR = '1')) then
-			haveRead <= '1';
-		else
+		if (rst = '0') then
 			haveRead <= '0';
+		elsif (rising_edge(clk)) then
+			if ((mem_addr = x"bf0e") and (memR = '1')) then
+				haveRead <= '1';
+			else
+				haveRead <= '0';
+			end if;
 		end if;
-	end if;
   end process;
 
 
