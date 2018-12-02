@@ -262,7 +262,9 @@ architecture Behavioral of aPlusC is
   
 begin
   
-  LEDout <= ins_addr(12 downto 0) & data_ready & tbre & tsre;
+  --LEDout <= ins_addr(12 downto 0) & data_ready & tbre & tsre;
+  
+  LEDout <= ASCII;
   
   process(clk)
   begin
