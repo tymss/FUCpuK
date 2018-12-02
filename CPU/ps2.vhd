@@ -26,7 +26,7 @@ architecture behaviour of PS2 is
 
 begin
   clk1 <= PS2_CLK when rising_edge(FCLK);
-  clk2  <= clk1 when rising_edge(FCLK);
+  clk2 <= clk1 when rising_edge(FCLK);
   clk <= (not clk1) and clk2;
   
   data <= PS2_DATA when rising_edge(FCLK);
