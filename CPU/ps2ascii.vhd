@@ -37,7 +37,7 @@ begin
       ASCIIBuff <= x"0000";
       state <= delay;
     elsif rising_edge(CLK) then
-      case state is
+       case state is
         when delay =>
           ASCII_OE <= '0';
           if PS2_OE = '1' then
@@ -56,7 +56,26 @@ begin
           end if;
 
         when arrow =>
-          -- todo: input is arrow
+          ASCII_OE <= '0';
+          if PS2_OE = '1' then
+            case PS2_DATA is
+              when x"75" => 
+                CodeBuff <= PS2_DATA; -- Up 
+                state <= normal;
+              when x"6b" => 
+                CodeBuff <= PS2_DATA; -- Left
+                state <= normal;
+              when x"72" => 
+                CodeBuff <= PS2_DATA; -- Down
+                state <= normal;
+              when x"74" => 
+                CodeBuff <= PS2_DATA; -- Right
+                state <= normal;
+              when x"f0" => 
+                state <= break; -- break
+              when others => state <= delay;
+            end case;
+          end if;
 
         when normal =>
           if (CODEbuff /= PREVbuff) then
@@ -319,7 +338,7 @@ begin
                   ASCIIBuff <= x"0030"; -- 0
                 end if;
                 state <= delay;
-             -- mode
+              -- mode
               when x"12" => 
                 Lshift <= '1'; -- LShift
                 state <= delay;	
@@ -371,7 +390,7 @@ begin
           if PS2_OE = '1' then
             if (PS2_DATA = x"12") then
               Lshift <= '0';
-            elsif (PS_DATA = x"59") then
+            elsif (PS2_DATA = x"59") then
               Rshift <= '0';
             end if;
             if (PS2_DATA = PREVbuff) then
